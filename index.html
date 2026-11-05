@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Guide App Ramassage</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<style>
+/* Layout: a driver's route — the day is drawn as a road with numbered stops; each stop = one section pairing a phone screen with numbered explanations. */
+:root{
+  --bg:#F2F4F7; --surface:#FFFFFF; --ink:#161B22; --muted:#56606E; --line:#D9DEE5;
+  --accent:#E4521A; --accent-ink:#B23E10; --accent-soft:#FCE9DF;
+  --ok:#17803D; --ok-soft:#E1F3E7; --warn:#C98500; --warn-soft:#FCF1D8; --bad:#C93434; --bad-soft:#FBE4E4; --info:#2C5BCB; --info-soft:#E3EAFB;
+  --road:#2A303A;
+  /* app screen tokens: the phone shows the real (light) app in both themes */
+  --bezel:#15181D; --app-bg:#F1F2F4; --app-card:#FFFFFF; --app-ink:#1B1F27; --app-muted:#7A818C; --app-line:#E6E8EC;
+  --app-orange:#F05A1E; --app-green:#17793A; --mk:#E4521A; --mk-ink:#FFFFFF;
+  --f-display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Barlow","Segoe UI",Roboto,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12151A; --surface:#1B1F26; --ink:#E8ECF2; --muted:#9BA4B2; --line:#2B313B;
+  --accent:#FF7A3D; --accent-ink:#FF9C6E; --accent-soft:#3A2218;
+  --ok:#4CC37A; --ok-soft:#173022; --warn:#F0B53A; --warn-soft:#352A12; --bad:#F06B6B; --bad-soft:#381B1B; --info:#7C9DF0; --info-soft:#1B2540;
+  --road:#C9CFD8; --bezel:#000000; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151A; --surface:#1B1F26; --ink:#E8ECF2; --muted:#9BA4B2; --line:#2B313B;
+  --accent:#FF7A3D; --accent-ink:#FF9C6E; --accent-soft:#3A2218;
+  --ok:#4CC37A; --ok-soft:#173022; --warn:#F0B53A; --warn-soft:#352A12; --bad:#F06B6B; --bad-soft:#381B1B; --info:#7C9DF0; --info-soft:#1B2540;
+  --road:#C9CFD8; --bezel:#000000; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.1;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.3rem,6vw,3.6rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(1.75rem,4vw,2.4rem);font-weight:800}
+h3{font-size:1.25rem;font-weight:700}
+p{margin:0}
+b,strong{font-weight:700}
+a{color:var(--accent-ink)}
+.eyebrow{font-family:var(--f-display);font-weight:700;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink)}
+.lead{font-size:1.15rem;color:var(--muted);max-width:60ch}
+
+/* ---------- header ---------- */
+header.top{padding-block:40px 28px}
+header.top .meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;color:var(--muted);font-size:.95rem}
+.lang{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border:1px solid var(--line);border-radius:99px;font-size:.85rem}
+
+/* route overview */
+.route{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px 22px 22px}
+.route h3{margin-bottom:18px}
+.stops{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;position:relative}
+.stops::before{content:"";position:absolute;left:8%;right:8%;top:22px;border-top:4px dashed var(--road);opacity:.35}
+.stops li{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.stops a{color:inherit;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:8px}
+.stop-dot{width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.4rem;box-shadow:0 0 0 6px var(--surface)}
+.stops li:last-child .stop-dot{background:var(--road);color:var(--surface)}
+.stops a > div{display:flex;flex-direction:column;align-items:center;gap:3px}
+.stop-t{font-family:var(--f-display);font-weight:700;font-size:1.1rem;line-height:1.15}
+.stop-d{font-size:.88rem;color:var(--muted);line-height:1.35}
+.side-cases{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line);align-items:center}
+.side-cases span.l{font-size:.9rem;color:var(--muted);margin-right:4px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--accent-soft);color:var(--accent-ink);font-weight:600;font-size:.92rem;text-decoration:none}
+@media (max-width:720px){
+  .stops{grid-template-columns:1fr;gap:14px}
+  .stops::before{left:23px;right:auto;top:10px;bottom:10px;border-top:0;border-left:4px dashed var(--road)}
+  .stops li,.stops a{flex-direction:row;text-align:left;align-items:center;gap:14px}
+  .stops li > a > div{align-items:flex-start}
+}
+
+/* ---------- sticky nav ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav.jump{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.jump .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+nav.jump .wrap::-webkit-scrollbar{display:none}
+nav.jump a{flex:none;color:var(--ink);text-decoration:none;font-weight:600;font-size:.92rem;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface)}
+nav.jump a:hover,nav.jump a:focus-visible{border-color:var(--accent);color:var(--accent-ink);outline:none}
+nav.jump a .n{color:var(--accent-ink);font-family:var(--f-display);font-weight:800;margin-right:4px}
+
+/* ---------- sections ---------- */
+section.step{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.step-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:28px}
+.big-n{flex:none;width:58px;height:58px;border-radius:14px;background:var(--accent);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.9rem}
+.big-n.alt{background:var(--road);color:var(--surface)}
+.step-head .lead{margin-top:8px}
+.demo{display:grid;grid-template-columns:300px minmax(0,1fr);gap:44px;align-items:start}
+.demo.rev{grid-template-columns:minmax(0,1fr) 300px}
+.demo.rev .phone-col{order:2}
+@media (max-width:780px){.demo,.demo.rev{grid-template-columns:minmax(0,1fr)}.demo.rev .phone-col{order:0}.phone-col{justify-self:center}}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:10px}
+.phone-cap{font-size:.85rem;color:var(--muted);text-align:center}
+
+/* numbered legend */
+ol.legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
+ol.legend li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start}
+.num.off{background:var(--road);color:var(--surface)}
+.num{width:28px;height:28px;border-radius:50%;background:var(--mk);color:var(--mk-ink);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1rem;margin-top:1px}
+ol.legend .t{font-weight:700;display:block}
+ol.legend .d{color:var(--muted)}
+.ui{display:inline-block;font-weight:700;padding:0 7px;border-radius:6px;background:var(--surface);border:1px solid var(--line);font-size:.92em;white-space:nowrap}
+.ui.or{background:var(--app-orange);border-color:var(--app-orange);color:#fff}
+.ui.gr{background:var(--app-green);border-color:var(--app-green);color:#fff}
+
+/* callout boxes */
+.box{border-radius:14px;padding:16px 18px;display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;margin-top:22px}
+.box svg{width:26px;height:26px}
+.box.warn{background:var(--warn-soft);color:var(--ink)} .box.warn svg{color:var(--warn)}
+.box.info{background:var(--info-soft)} .box.info svg{color:var(--info)}
+.box.bad{background:var(--bad-soft)} .box.bad svg{color:var(--bad)}
+.box ul{margin:6px 0 0;padding-left:18px}
+.box .h{font-weight:700}
+
+/* ---------- PHONE MOCKUP ---------- */
+.phone{width:290px;max-width:100%;background:var(--bezel);border-radius:40px;padding:10px;box-shadow:0 18px 40px -18px rgba(10,14,20,.45)}
+.screen{position:relative;background:var(--app-bg);border-radius:31px;overflow:hidden;color:var(--app-ink);font-family:var(--f-body);font-size:12.5px;line-height:1.35;display:flex;flex-direction:column}
+.sb{display:flex;justify-content:space-between;align-items:center;padding:12px 22px 4px;font-weight:700;font-size:12px;background:var(--app-card)}
+.sb .ic{display:flex;gap:4px;align-items:center}
+.sb .ic i{display:block;background:var(--app-ink);border-radius:2px}
+.ab{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:6px;padding:8px 14px 12px;background:var(--app-card);position:relative}
+.ab .ttl{text-align:center;font-weight:700;font-size:14.5px}
+.ab .r{display:flex;gap:10px;justify-content:flex-end;min-width:28px}
+.ab svg,.ic-btn svg{width:20px;height:20px;stroke:var(--app-ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.body{padding:12px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card{background:var(--app-card);border-radius:14px;padding:12px;position:relative}
+.rel{position:relative}
+.mk{position:absolute;z-index:4;width:22px;height:22px;border-radius:50%;background:var(--mk);color:var(--mk-ink);font:800 13px/22px var(--f-display);text-align:center;box-shadow:0 0 0 2.5px #fff,0 2px 6px rgba(0,0,0,.25)}
+.pills{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pill{background:var(--app-card);border-radius:10px;text-align:center;padding:8px 2px;font-weight:600;color:var(--app-muted);font-size:11.5px}
+.pill.on{background:var(--app-orange);color:#fff}
+.mono{font-variant-numeric:tabular-nums}
+.muted{color:var(--app-muted)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hr{border-top:1px solid var(--app-line);margin:8px 0}
+.pin-line{display:grid;grid-template-columns:14px 1fr;gap:8px}
+.pin-line .dot{width:12px;height:12px;border:2px solid var(--app-orange);border-radius:50%;margin-top:2px}
+.pin-line .dot.g{border-color:var(--app-muted)}
+.tabbar{display:grid;grid-template-columns:1fr 1fr;background:var(--app-card);padding:8px 0 14px;border-top:1px solid var(--app-line);position:relative}
+.tabbar div{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--app-muted);font-weight:600}
+.tabbar div.on{color:var(--app-orange)}
+.tabbar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8}
+.home-ind{height:4px;width:96px;background:var(--app-ink);border-radius:4px;margin:6px auto 8px;opacity:.85}
+.lbl{font-size:11.5px;font-weight:600;margin-bottom:5px}
+.lbl .st{color:#E03A3A}
+.field{background:var(--app-bg);border-radius:8px;padding:8px 10px;font-weight:600}
+.field.input{background:var(--app-card);border:1.5px solid var(--app-line);display:inline-flex;gap:10px;align-items:center}
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ph{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10.5px;font-weight:600}
+.ph .slot{width:100%;aspect-ratio:1;border-radius:10px;background:var(--app-bg);border:1.5px dashed #C7CBD2;display:grid;place-items:center;position:relative;overflow:hidden}
+.ph .slot svg{width:22px;height:22px;stroke:var(--app-muted);fill:none;stroke-width:1.7}
+.ph .slot.full{border:0}
+.ph .x{position:absolute;top:3px;right:3px;width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:10px;line-height:14px;text-align:center}
+.btn{background:var(--app-orange);color:#fff;text-align:center;font-weight:700;border-radius:12px;padding:11px;font-size:13px;position:relative}
+.btn.ghost{background:var(--app-card);color:var(--app-muted);border:1.5px solid #CFD3D9}
+.btn.green{background:var(--app-green)}
+.btns3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.btns3 .btn{padding:10px 2px;font-size:12px}
+.tag{position:absolute;top:0;right:0;font-size:10px;font-weight:700;color:#fff;padding:3px 10px;border-radius:0 14px 0 10px}
+.tag.new{background:#A6431D}.tag.part{background:#E8A317}.tag.up{background:#D23B34}
+.addr-card{display:grid;grid-template-columns:30px 1fr;gap:10px;padding-top:16px}
+.addr-card .no{font-family:var(--f-display);font-weight:800;font-size:26px;color:var(--app-orange);text-align:center;border-right:1px solid var(--app-line);line-height:1}
+.addr-card .a{font-weight:700;font-size:12.5px}
+.hours{font-size:11px;line-height:1.55}
+.note{background:var(--app-bg);border-radius:8px;padding:6px 8px;font-size:10.5px;color:var(--app-muted);margin-top:6px}
+.search{display:flex;gap:8px;align-items:center}
+.search .in{flex:1;background:var(--app-bg);border-radius:8px;padding:7px 9px;color:var(--app-muted);font-size:11.5px;display:flex;gap:6px;align-items:center}
+.search .in svg{width:13px;height:13px;stroke:var(--app-muted);fill:none;stroke-width:2}
+.utabs{display:flex;justify-content:space-around;background:var(--app-card);padding:4px 0 0;font-weight:600;font-size:12px;color:var(--app-muted)}
+.utabs span{padding-bottom:8px}
+.utabs .on{color:var(--app-orange);border-bottom:3px solid var(--app-orange)}
+.ic-btn{width:34px;height:34px;border-radius:50%;background:var(--app-bg);display:grid;place-items:center}
+.ic-btn svg{width:17px;height:17px}
+.scan{border:2px solid #D3D7DD;border-radius:12px;height:58px;display:grid;place-items:center;background:var(--app-bg)}
+.scan svg{width:24px;height:24px;stroke:#A9AFB8;fill:none;stroke-width:1.8}
+.ctr{display:grid;grid-template-columns:72px 1fr;align-items:center;gap:8px;font-weight:700;font-size:13px}
+.ctr .st{color:#E03A3A}
+.stepper{display:grid;grid-template-columns:34px 1fr 34px;background:var(--app-bg);border-radius:99px;overflow:hidden;text-align:center;font-weight:600;align-items:center;height:30px}
+.stepper span{color:var(--app-muted);font-size:16px}
+.stepper b{background:var(--app-card);height:100%;display:grid;place-items:center}
+.sig{height:54px;border:1.5px solid var(--app-line);border-radius:10px;background:var(--app-card);display:grid;place-items:center}
+.sig svg{width:120px;height:40px;stroke:var(--app-ink);fill:none;stroke-width:1.8;stroke-linecap:round}
+.toast{position:absolute;left:50%;top:66%;transform:translate(-50%,-50%);background:rgba(40,44,52,.88);color:#fff;border-radius:12px;padding:14px 18px;text-align:center;font-size:12px;font-weight:600;z-index:3;width:70%}
+.toast svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:2;display:block;margin:0 auto 6px}
+
+/* thumbnails drawn in CSS */
+.plate{width:86%;height:30%;background:#fff;border:1.5px solid #222;border-radius:4px;display:grid;grid-template-columns:18% 1fr;overflow:hidden;font:700 9px/1 var(--f-display);color:#111}
+.plate i{background:#1F4AA8;color:#fff;font-style:normal;display:grid;place-items:end center;padding-bottom:2px;font-size:6px}
+.plate b{display:grid;place-items:center;letter-spacing:.02em}
+.thumb-plate{background:linear-gradient(160deg,#9AA3AE,#5F6974)}
+.thumb-odo{background:#16191D;display:grid;place-items:center}
+.odo{font:700 11px/1 ui-monospace,Menlo,monospace;color:#7CF29C;background:#0B0D10;padding:4px 5px;border-radius:3px;letter-spacing:.06em}
+.thumb-box{background:linear-gradient(170deg,#E7D6BC,#C9A97D)}
+.thumb-box::after{content:"";position:absolute;left:18%;right:18%;top:28%;bottom:22%;background:#B98A52;border-radius:3px;box-shadow:inset 0 10px 0 #A87A44}
+
+/* viewfinder strip */
+.vf-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px;max-width:440px}
+.vf{background:#101317;border-radius:16px;padding:14px;color:#fff;display:flex;flex-direction:column;align-items:center;gap:10px}
+.vf .frame{width:100%;aspect-ratio:4/3;position:relative;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%,#3A424C,#1A1F25)}
+.vf .frame::before,.vf .frame::after{content:"";position:absolute;inset:8px;border:2px solid #fff;opacity:.85;clip-path:polygon(0 0,22% 0,22% 4px,4px 4px,4px 22%,0 22%,0 0,100% 0,100% 22%,calc(100% - 4px) 22%,calc(100% - 4px) 4px,78% 4px,78% 0,100% 0,100% 100%,78% 100%,78% calc(100% - 4px),calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) 78%,100% 78%,100% 100%,0 100%,0 78%,4px 78%,4px calc(100% - 4px),22% calc(100% - 4px),22% 100%,0 100%)}
+.vf .frame::after{display:none}
+.vf .cap{font-size:.85rem;font-weight:600;text-align:center}
+.vf .shutter{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:inset 0 0 0 3px #101317;background:#fff}
+
+/* decision */
+.decide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:8px}
+@media (max-width:780px){.decide{grid-template-columns:minmax(0,1fr)}}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;border-top:6px solid var(--c)}
+.dcard .q{font-size:.85rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dcard .ans{font-family:var(--f-display);font-weight:800;font-size:1.5rem;line-height:1.1}
+.dcard .b{align-self:flex-start;font-weight:700;padding:8px 18px;border-radius:10px;font-size:1rem}
+.dcard.ok{--c:var(--ok)} .dcard.ok .b{background:var(--app-green);color:#fff}
+.dcard.pa{--c:var(--warn)} .dcard.pa .b{background:var(--app-orange);color:#fff}
+.dcard.ko{--c:var(--bad)} .dcard.ko .b{background:var(--surface);color:var(--muted);border:1.5px solid var(--line)}
+.dcard .res{color:var(--muted);font-size:.95rem}
+.reasons{background:var(--bg);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.reasons .rt{font-weight:700;font-size:.9rem}
+.reasons label{display:flex;gap:10px;align-items:center;font-size:.95rem}
+.reasons .rd{width:16px;height:16px;border-radius:50%;border:2px solid var(--muted);flex:none}
+.reasons .rd.on{border-color:var(--bad);box-shadow:inset 0 0 0 3px var(--bg);background:var(--bad)}
+.reasons .ph-add{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.92rem;color:var(--bad);padding-top:4px;border-top:1px dashed var(--line)}
+
+/* map */
+.mapwrap{position:relative;height:440px;background:#E8E6E1}
+.mapwrap svg.map{position:absolute;inset:0;width:100%;height:100%}
+.mapbtn{position:absolute;width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.mapbtn svg{width:19px;height:19px;stroke:var(--app-ink);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.pop{position:absolute;left:50%;top:70px;transform:translateX(-50%);background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);padding:6px 0;width:68%;font-size:12.5px;font-weight:600}
+.pop div{display:flex;align-items:center;gap:8px;padding:7px 14px}
+.pop div:first-child{background:#F1F3F6}
+.pop i{width:9px;height:9px;border-radius:50%;display:block}
+.pop b{margin-left:auto;font-variant-numeric:tabular-nums}
+
+/* offline flow */
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:26px;counter-reset:f}
+@media (max-width:780px){.flow{grid-template-columns:minmax(0,1fr)}}
+.fstep{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;gap:12px;align-items:flex-start}
+.fstep .fi{flex:none;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--info-soft);color:var(--info)}
+.fstep .fi svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.fstep .t{font-weight:700;display:block}
+.fstep .d{color:var(--muted);font-size:.95rem}
+
+/* special case */
+.special{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:780px){.special{grid-template-columns:minmax(0,1fr)}}
+.sc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px}
+.sc h3{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.sc h3 svg{width:26px;height:26px;stroke:var(--accent);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.sc p+p{margin-top:10px}
+.mini-btn{margin-top:14px;background:var(--app-orange);color:#fff;font-weight:700;border-radius:12px;padding:11px 14px;text-align:center;max-width:300px}
+.statusline{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:6px 12px;border-radius:8px;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.92rem}
+
+/* checklist */
+.check{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:780px){.check{grid-template-columns:minmax(0,1fr)}}
+.ck{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px}
+.ck h3{margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ck h3 small{font-family:var(--f-body);font-weight:600;font-size:.8rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.ck ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.ck li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start}
+.ck li::before{content:"";width:18px;height:18px;border:2px solid var(--muted);border-radius:5px;margin-top:3px}
+footer{padding-block:34px 50px;color:var(--muted);font-size:.9rem}
+
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+
+/* ---------- print / PDF ---------- */
+@page{size:A4;margin:12mm 11mm}
+@media print{
+  :root{--bg:#FFFFFF;--surface:#FFFFFF;--ink:#161B22;--muted:#4D5663;--line:#D9DEE5;--accent:#E4521A;--accent-ink:#B23E10;--accent-soft:#FCE9DF;--ok:#17803D;--warn:#C98500;--warn-soft:#FCF1D8;--bad:#C93434;--bad-soft:#FBE4E4;--info:#2C5BCB;--info-soft:#E3EAFB;--road:#2A303A;--bezel:#15181D;color-scheme:light}
+  body{font-size:13.5px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  nav.jump,body::before{display:none}
+  .wrap{max-width:none;padding:0}
+  header.top{padding-block:0 10px}
+  section.step{padding-block:0;border:0;break-before:page}
+  .demo{grid-template-columns:270px minmax(0,1fr);gap:30px}
+  .demo.rev{grid-template-columns:minmax(0,1fr) 270px}
+  .demo.rev .phone-col{order:2}
+  .phone{width:262px;box-shadow:none}
+  .mapwrap{height:380px}
+  .decide,.flow{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .check{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .special{grid-template-columns:1fr 1fr}
+  .dcard,.sc,.ck,.box,.fstep{break-inside:avoid}
+  .step-head{margin-bottom:18px}
+  footer{padding-block:20px 0}
+}
+</style>
+
+<!-- shared icon sprites -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M7 18a5 5 0 0 1-.6-9.96A6 6 0 0 1 18 9a4 4 0 0 1-.5 8"/><path d="M12 12v8M9 15l3-3 3 3"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 15s5-4.2 5-8a5 5 0 0 0-10 0c0 3.8 5 8 5 8z"/><circle cx="12" cy="7" r="1.8"/><path d="M7 14l-4 6h18l-4-6"/></symbol>
+    <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-nav" viewBox="0 0 24 24"><path d="M20 4L4 11l7 2 2 7z"/></symbol>
+    <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5h3M17 5h3v3M20 16v3h-3M7 19H4v-3M4 12h16"/></symbol>
+    <symbol id="i-task" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 11h6M9 15h4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-6 8-6s7 1.5 8 6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.5 9.5"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="1.6"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3l10 18H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v5M12 18v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-nowifi" viewBox="0 0 24 24"><path d="M3 3l18 18M8.5 12.5a5 5 0 0 1 4-1.4M5 9a10 10 0 0 1 4-2.2M15 7.2A10 10 0 0 1 19 9M12 18h.01"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h12v10H2zM14 9h4l3 3v4h-7"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Formation chauffeurs · Ramassage</div>
+    <h1 style="margin-top:8px">Guide de l'application Ramassage</h1>
+    <p class="lead" style="margin-top:12px">Ce guide vous montre, écran par écran, comment utiliser l'application pendant votre tournée. Suivez les étapes dans l'ordre&nbsp;: les numéros orange sur chaque écran renvoient aux explications à côté.</p>
+    <div class="meta"><span class="lang">Version française</span><span>Durée de lecture : 10 min</span></div>
+
+    <div class="route">
+      <h3>Votre tournée en 5 étapes</h3>
+      <ol class="stops">
+        <li><a href="#vehicule"><span class="stop-dot">1</span><div><span class="stop-t">Vérifier le véhicule</span><span class="stop-d">Plaque, km de départ, photos</span></div></a></li>
+        <li><a href="#adresses"><span class="stop-dot">2</span><div><span class="stop-t">Ouvrir la liste des adresses</span><span class="stop-d">Ordre, horaires, consignes</span></div></a></li>
+        <li><a href="#ramassage"><span class="stop-dot">3</span><div><span class="stop-t">Ramasser à chaque adresse</span><span class="stop-d">Compter, photographier, faire signer</span></div></a></li>
+        <li><a href="#resultat"><span class="stop-dot">4</span><div><span class="stop-t">Valider le résultat</span><span class="stop-d">Terminé, Partiel ou Échec</span></div></a></li>
+        <li><a href="#fin"><span class="stop-dot">5</span><div><span class="stop-t">Fin de tournée</span><span class="stop-d">Déchargement, km d'arrivée, photos</span></div></a></li>
+      </ol>
+      <div class="side-cases">
+        <span class="l">Cas particuliers :</span>
+        <a class="chip" href="#reseau">Pas de réseau</a>
+        <a class="chip" href="#plein">Camion plein</a>
+        <a class="chip" href="#carte">Carte et progression</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="jump" aria-label="Sommaire">
+  <div class="wrap">
+    <a href="#accueil">Accueil</a>
+    <a href="#vehicule"><span class="n">1</span>Véhicule</a>
+    <a href="#adresses"><span class="n">2</span>Adresses</a>
+    <a href="#ramassage"><span class="n">3</span>Ramassage</a>
+    <a href="#resultat"><span class="n">4</span>Résultat</a>
+    <a href="#carte">Carte</a>
+    <a href="#reseau">Pas de réseau</a>
+    <a href="#plein">Camion plein</a>
+    <a href="#fin"><span class="n">5</span>Fin de tournée</a>
+    <a href="#memo">Mémo</a>
+  </div>
+</nav>
+
+<main>
+<!-- ============ ACCUEIL ============ -->
+<section class="step" id="accueil">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n alt" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-task"/></svg></div>
+      <div>
+        <div class="eyebrow">Avant de commencer</div>
+        <h2>L'écran d'accueil : vos tâches</h2>
+        <p class="lead">Quand vous ouvrez l'application, vous arrivez directement sur la page <b>Tâches</b>.</p>
+      </div>
+    </div>
+    <div class="demo">
+      <div class="phone-col">
+        <div class="phone"><div class="screen">
+          <div class="sb"><span>08:02</span><span class="ic"><i style="width:3px;height:6px"></i><i style="width:3px;height:8px"></i><i style="width:3px;height:10px"></i><i style="width:18px;height:9px;margin-left:4px"></i></span></div>
+          <div class="ab"><span></span><span class="ttl">Tâches</span>
+            <span class="r"><span class="rel"><svg><use href="#i-up"/></svg><span class="mk" style="top:-10px;left:-12px">2</span></span><span class="rel"><svg><use href="#i-clock"/></svg><span class="mk" style="top:14px;right:-6px">3</span></span></span></div>
+          <div class="body">
+            <div class="pills rel"><div class="pill on">À faire (2)</div><div class="pill">En cours (1)</div><div class="pill">Terminé (4)</div><span class="mk" style="top:-10px;left:-6px">1</span></div>
+            <div class="card">
+              <span class="mk" style="top:-9px;right:-6px">4</span>
+              <div class="row"><b class="mono">P202511050005</b><span class="muted">Total colis : <b style="color:var(--app-ink)">12</b></span></div>
+              <div class="hr"></div>
+              <div class="pin-line"><span class="dot"></span><div><div class="muted mono">05/11/2025</div><b>14 Rue Gustave Eiffel, 93200 Saint-Denis</b></div></div>
+              <div class="pin-line" style="margin-top:8px"><span class="dot g"></span><div>Arrêts : <b>6</b></div></div>
+            </div>
+            <div class="card">
+              <div class="row"><b class="mono">P202511050011</b><span class="muted">Total colis : <b style="color:var(--app-ink)">30</b></span></div>
+              <div class="hr"></div>
+              <div class="pin-line"><span class="dot"></span><div><div class="muted mono">05/11/2025</div><b>3 Av. de l'Europe, 95000 Cergy</b></div></div>
+              <div class="pin-line" style="margin-top:8px"><span class="dot g"></span><div>Arrêts : <b>4</b></div></div>
+            </div>
+            <div style="height:40px"></div>
+          </div>
+          <div class="tabbar"><div class="on"><svg><use href="#i-task"/></svg>Tâches</div><div><svg><use href="#i-user"/></svg>Mon compte</div><span class="mk" style="top:-10px;left:12px">5</span></div>
+          <div class="home-ind" style="margin:0 auto 8px"></div>
+        </div></div>
+        <span class="phone-cap">Exemple d'écran · données fictives</span>
+      </div>
+      <div>
+        <ol class="legend">
+          <li><span class="num">1</span><div><span class="t">Trois onglets en haut</span><span class="d"><span class="ui or">À faire</span> missions pas encore commencées · <span class="ui">En cours</span> missions démarrées · <span class="ui">Terminé</span> missions finies. Le chiffre entre parenthèses = nombre de missions.</span></div></li>
+          <li><span class="num">2</span><div><span class="t">Icône nuage avec flèche</span><span class="d">Ouvre la <b>liste des envois</b> : les données enregistrées sans réseau et pas encore envoyées (voir <a href="#reseau">Pas de réseau</a>).</span></div></li>
+          <li><span class="num">3</span><div><span class="t">Icône horloge</span><span class="d">Ouvre l'<b>historique des tâches</b>.</span></div></li>
+          <li><span class="num">4</span><div><span class="t">Une carte = une mission</span><span class="d">Numéro de mission, date, adresse, nombre d'arrêts et total de colis. <b>Touchez la carte</b> pour commencer.</span></div></li>
+          <li><span class="num">5</span><div><span class="t">Barre du bas</span><span class="d"><b>Tâches</b> pour revenir ici, <b>Mon compte</b> pour votre profil.</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1 VEHICULE ============ -->
+<section class="step" id="vehicule">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n">1</div>
+      <div>
+        <div class="eyebrow">Étape 1 · Au départ</div>
+        <h2>Vérification du véhicule</h2>
+        <p class="lead">Touchez une carte de mission : l'écran <b>Vérification du véhicule</b> s'ouvre. Remplissez-le avant de partir.</p>
+      </div>
+    </div>
+    <div class="demo">
+      <div class="phone-col">
+        <div class="phone"><div class="screen">
+          <div class="sb"><span>08:05</span><span class="ic"><i style="width:3px;height:6px"></i><i style="width:3px;height:8px"></i><i style="width:3px;height:10px"></i><i style="width:18px;height:9px;margin-left:4px"></i></span></div>
+          <div class="ab"><svg><use href="#i-back"/></svg><span class="ttl">Vérification du véhicule</span><span class="r"></span></div>
+          <div class="body">
+            <div class="card">
+              <span class="mk" style="top:8px;right:8px">1</span>
+              <div class="lbl"><span class="st">*</span> Numéro de plaque</div>
+              <div class="field mono">GH-482-KL</div>
+              <div class="lbl rel" style="margin-top:12px"><span class="st">*</span> Kilométrage de départ<span class="mk" style="top:-3px;right:-4px">2</span></div>
+              <div class="field input mono">48 215 <span class="muted">km</span></div>
+            </div>
+            <div class="card">
+              <span class="mk" style="top:-9px;right:-6px">3</span>
+              <div class="photos">
+                <div class="ph"><div class="slot full thumb-plate"><div class="plate"><i>F</i><b>GH-482-KL</b></div><span class="x">×</span></div><span><span style="color:#E03A3A">*</span> Plaque</span></div>
+                <div class="ph"><div class="slot full thumb-odo"><span class="odo">048215</span><span class="x">×</span></div><span><span style="color:#E03A3A">*</span> Compteur</span></div>
+                <div class="ph"><div class="slot"><svg><use href="#i-cam"/></svg></div><span>Autres (3)</span></div>
+              </div>
+            </div>
+            <div style="height:70px"></div>
+            <div class="btn">Suivant<span class="mk" style="top:-10px;right:-6px">4</span></div>
+          </div>
+          <div class="home-ind"></div>
+        </div></div>
+        <span class="phone-cap">Exemple d'écran · données fictives</span>
+      </div>
+      <div>
+        <ol class="legend">
+          <li><span class="num">1</span><div><span class="t">Numéro de plaque</span><span class="d">Déjà rempli automatiquement. <b>Rien à saisir.</b></span></div></li>
+          <li><span class="num">2</span><div><span class="t">Kilométrage de départ</span><span class="d">Recopiez le chiffre affiché sur le compteur du véhicule.</span></div></li>
+          <li><span class="num">3</span><div><span class="t">Photos</span><span class="d">Touchez une case pour ouvrir l'appareil photo. Obligatoires : <b>la plaque</b> et <b>le compteur</b>. Case « Autres » si besoin.</span></div></li>
+          <li><span class="num">4</span><div><span class="t">Touchez <span class="ui or">Suivant</span></span><span class="d">Quand tout est rempli. Vous arrivez sur la liste des adresses.</span></div></li>
+        </ol>
+        <div class="box warn">
+          <svg><use href="#i-warn"/></svg>
+          <div><span class="h">Règles pour les photos</span>
+            <ul><li>Uniquement avec <b>l'appareil photo</b> : impossible de choisir une photo dans la galerie.</li><li><b>5 photos maximum</b> : plaque + compteur + autres.</li></ul>
+          </div>
+        </div>
+        <div class="vf-row" aria-hidden="true">
+          <div class="vf"><div class="frame"><div class="plate" style="width:70%;height:24%;font-size:12px"><i>F</i><b>GH-482-KL</b></div></div><span class="cap">« Photographiez la plaque »</span><span class="shutter"></span></div>
+          <div class="vf"><div class="frame"><span class="odo" style="font-size:15px">048215</span></div><span class="cap">« Photographiez le compteur »</span><span class="shutter"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 ADRESSES ============ -->
+<section class="step" id="adresses">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n">2</div>
+      <div>
+        <div class="eyebrow">Étape 2 · Préparer la tournée</div>
+        <h2>La liste des adresses</h2>
+        <p class="lead">Dans l'onglet <b>À faire</b>, touchez une mission : vous voyez toutes les adresses à ramasser, dans l'ordre de passage.</p>
+      </div>
+    </div>
+    <div class="demo rev">
+      <div class="phone-col">
+        <div class="phone"><div class="screen">
+          <div class="sb"><span>08:12</span><span class="ic"><i style="width:3px;height:6px"></i><i style="width:3px;height:8px"></i><i style="width:3px;height:10px"></i><i style="width:18px;height:9px;margin-left:4px"></i></span></div>
+          <div class="ab"><svg><use href="#i-back"/></svg><span class="ttl">Détails de la mission</span><span class="r rel"><svg><use href="#i-map"/></svg><span class="mk" style="top:16px;right:-4px">1</span></span></div>
+          <div style="background:var(--app-card);padding:0 12px 8px" class="rel">
+            <div class="search"><span class="in"><svg><use href="#i-search"/></svg>Rechercher une adresse</span><b style="font-size:12px">Rechercher</b></div>
+            <span class="mk" style="top:-6px;left:2px">2</span>
+          </div>
+          <div class="utabs rel"><span class="on">À ramasser (6)</span><span>Ramassé (0)</span><span class="mk" style="top:0;right:6px">3</span></div>
+          <div class="body" style="gap:8px">
+            <div class="card addr-card">
+              <span class="tag new">Nouveau</span><span class="mk" style="top:22px;right:-4px">4</span>
+              <span class="no">1</span>
+              <div>
+                <div class="a">14 Rue Gustave Eiffel, 93200 Saint-Denis</div>
+                <div class="muted" style="font-size:11px;margin-top:2px">Entrepôt · Quai 4</div>
+                <div class="hr" style="margin:6px 0"></div>
+                <div class="hours mono">Heures d'ouverture : 9:00–12:00<br>Meilleur créneau : 10:00–11:30<br>Ramassage possible : 9:00–17:00</div>
+                <div class="note">Note : entrer par la porte 3. Le client demande un passage après 10h00.</div>
+              </div>
+            </div>
+            <div class="card addr-card">
+              <span class="tag part">Partiel</span>
+              <span class="no">2</span>
+              <div>
+                <div class="a">8 Allée des Érables, 93200 Saint-Denis</div>
+                <div class="muted" style="font-size:11px;margin-top:2px">Boutique</div>
+                <div class="hr" style="margin:6px 0"></div>
+                <div class="hours mono">Heures d'ouverture : 10:00–19:00</div>
+              </div>
+            </div>
+            <div class="btn" style="margin-top:4px;font-size:12px">Retour au dépôt pour déchargement<span class="mk" style="top:-10px;right:-6px">5</span></div>
+          </div>
+          <div class="home-ind"></div>
+        </div></div>
+        <span class="phone-cap">Exemple d'écran · données fictives</span>
+      </div>
+      <div>
+        <ol class="legend">
+          <li><span class="num">1</span><div><span class="t">Icône carte</span><span class="d">Affiche l'itinéraire de toutes les adresses et le tableau de progression (voir <a href="#carte">Carte</a>).</span></div></li>
+          <li><span class="num">2</span><div><span class="t">Recherche</span><span class="d">Tapez une partie de l'adresse pour la retrouver vite.</span></div></li>
+          <li><span class="num">3</span><div><span class="t">À ramasser / Ramassé</span><span class="d">Les adresses passent automatiquement dans « Ramassé » une fois traitées.</span></div></li>
+          <li><span class="num">4</span><div><span class="t">Une carte = une adresse</span><span class="d">Le <b>grand chiffre orange</b> est l'ordre de passage. Lisez les <b>horaires</b> et la <b>note</b> du client avant d'y aller. Touchez la carte pour faire le ramassage.</span></div></li>
+          <li><span class="num">5</span><div><span class="t">Retour au dépôt pour déchargement</span><span class="d">Seulement si le camion est plein (voir <a href="#plein">Camion plein</a>).</span></div></li>
+        </ol>
+        <h3 style="margin-top:28px;margin-bottom:12px">Les étiquettes en haut à droite</h3>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;align-items:center"><span style="background:#A6431D;color:#fff;font-weight:700;font-size:.85rem;padding:4px 10px;border-radius:8px;text-align:center">Nouveau</span><span>La mission vient d'être <b>ajoutée</b> à votre tournée.</span></div>
+          <div style="display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;align-items:center"><span style="background:#E8A317;color:#fff;font-weight:700;font-size:.85rem;padding:4px 10px;border-radius:8px;text-align:center">Partiel</span><span>Ramassage déjà commencé mais pas complet : la mission <b>peut être traitée à nouveau</b>.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 RAMASSAGE ============ -->
+<section class="step" id="ramassage">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n">3</div>
+      <div>
+        <div class="eyebrow">Étape 3 · Chez le client</div>
+        <h2>Le ramassage</h2>
+        <p class="lead">Touchez l'adresse dans la liste. L'écran <b>Opération de ramassage</b> s'ouvre. Remplissez-le de haut en bas.</p>
+      </div>
+    </div>
+    <div class="demo">
+      <div class="phone-col">
+        <div class="phone"><div class="screen">
+          <div class="sb"><span>10:14</span><span class="ic"><i style="width:3px;height:6px"></i><i style="width:3px;height:8px"></i><i style="width:3px;height:10px"></i><i style="width:18px;height:9px;margin-left:4px"></i></span></div>
+          <div class="ab"><svg><use href="#i-back"/></svg><span class="ttl">Opération de ramassage</span><span class="r"></span></div>
+          <div class="body">
+            <div class="card">
+              <b>14 Rue Gustave Eiffel, 93200 Saint-Denis</b>
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+                <span class="ic-btn rel"><svg><use href="#i-phone"/></svg><span class="mk" style="top:-12px;left:-8px">1</span></span>
+                <span class="ic-btn rel"><svg><use href="#i-nav"/></svg><span class="mk" style="top:-12px;right:-8px">2</span></span>
+              </div>
+            </div>
+            <div class="card" style="display:flex;flex-direction:column;gap:9px">
+              <div class="scan"><svg><use href="#i-scan"/></svg></div>
+              <div class="rel" style="display:flex;flex-direction:column;gap:8px">
+                <span class="mk" style="top:-4px;left:-15px">3</span>
+                <div class="ctr"><span><span class="st">*</span>Colis</span><div class="stepper"><span>−</span><b class="mono">8</b><span>+</span></div></div>
+                <div class="ctr"><span><span class="st">*</span>Cartons</span><div class="stepper"><span>−</span><b class="mono">3</b><span>+</span></div></div>
+                <div class="ctr"><span><span class="st">*</span>Palettes</span><div class="stepper"><span>−</span><b class="mono">0</b><span>+</span></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <span class="mk" style="top:-9px;right:-6px">4</span>
+              <div class="photos">
+                <div class="ph"><div class="slot full thumb-box"><span class="x">×</span></div><span><span style="color:#E03A3A">*</span> Marchandise</span></div>
+                <div class="ph"><div class="slot"><svg><use href="#i-cam"/></svg></div><span><span style="color:#E03A3A">*</span> Chargement</span></div>
+                <div class="ph"><div class="slot"><svg><use href="#i-cam"/></svg></div><span>Autres (3)</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <span class="mk" style="top:-9px;right:-6px">5</span>
+              <div class="lbl"><span class="st">*</span> Signature</div>
+              <div class="sig"><svg viewBox="0 0 120 40"><path d="M6 28c8-16 14-20 16-12s-6 14 2 10 10-18 16-14-2 14 6 12 12-12 18-10 2 8 8 8 14-6 20-10 10 2 16 0"/></svg></div>
+            </div>
+            <div class="btns3 rel"><div class="btn ghost">Échec</div><div class="btn">Partiel</div><div class="btn green">Terminé</div><span class="mk" style="top:-17px;left:50%;margin-left:-11px">6</span></div>
+          </div>
+          <div class="home-ind"></div>
+        </div></div>
+        <span class="phone-cap">Exemple d'écran · données fictives</span>
+      </div>
+      <div>
+        <ol class="legend">
+          <li><span class="num">1</span><div><span class="t">Appeler le client</span><span class="d">Pour vérifier qu'il y a bien des colis, ou prévenir de votre arrivée.</span></div></li>
+          <li><span class="num">2</span><div><span class="t">Navigation</span><span class="d">Ouvre l'application GPS de votre téléphone. <b>L'adresse est déjà remplie.</b></span></div></li>
+          <li><span class="num">3</span><div><span class="t">Comptez et saisissez</span><span class="d">Le nombre de <b>colis</b>, de <b>cartons</b> et de <b>palettes</b>, avec les boutons − et +.</span></div></li>
+          <li><span class="num">4</span><div><span class="t">Photos</span><span class="d">Photo des colis, photo du chargement, et dans « Autres » : document signé, photo du commerçant.</span></div></li>
+          <li><span class="num">5</span><div><span class="t">Signature</span><span class="d">Faites signer le client directement sur l'écran.</span></div></li>
+          <li><span class="num">6</span><div><span class="t">Choisissez le résultat</span><span class="d"><span class="ui">Échec</span> <span class="ui or">Partiel</span> <span class="ui gr">Terminé</span> → voir l'étape 4 juste en dessous.</span></div></li>
+        </ol>
+        <div class="box info">
+          <svg><use href="#i-info"/></svg>
+          <div><span class="h">Le petit astérisque rouge *</span><br>Il indique un champ <b>obligatoire</b>. Sans lui, vous ne pourrez pas valider.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 RESULTAT ============ -->
+<section class="step" id="resultat">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n">4</div>
+      <div>
+        <div class="eyebrow">Étape 4 · Valider l'adresse</div>
+        <h2>Terminé, Partiel ou Échec ?</h2>
+        <p class="lead">Posez-vous une seule question : <b>qu'avez-vous pu récupérer ?</b></p>
+      </div>
+    </div>
+    <div class="decide">
+      <div class="dcard ok">
+        <span class="q">J'ai tout récupéré</span>
+        <span class="ans">Ramassage réussi</span>
+        <span class="b">Terminé</span>
+        <span class="res">L'adresse passe en vert sur la carte.</span>
+      </div>
+      <div class="dcard pa">
+        <span class="q">J'ai récupéré une partie</span>
+        <span class="ans">Ramassage partiel</span>
+        <span class="b">Partiel</span>
+        <span class="res">L'adresse garde l'étiquette « Partiel » et pourra être traitée à nouveau.</span>
+      </div>
+      <div class="dcard ko">
+        <span class="q">Je n'ai rien récupéré</span>
+        <span class="ans">Échec du ramassage</span>
+        <span class="b">Échec</span>
+        <div class="reasons">
+          <span class="rt">Choisissez la raison :</span>
+          <label><span class="rd"></span>Aucun colis à récupérer</label>
+          <label><span class="rd"></span>Adresse incorrecte</label>
+          <label><span class="rd on"></span>Client absent</label>
+          <label><span class="rd"></span>Reprogrammer un rendez-vous</label>
+          <span class="ph-add"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9"><use href="#i-cam"/></svg>Ajoutez aussi des photos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CARTE ============ -->
+<section class="step" id="carte">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n alt" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-map"/></svg></div>
+      <div>
+        <div class="eyebrow">Outil utile</div>
+        <h2>La carte et la progression</h2>
+        <p class="lead">Dans <b>Détails de la mission</b>, touchez l'<b>icône carte</b> en haut à droite.</p>
+      </div>
+    </div>
+    <div class="demo rev">
+      <div class="phone-col">
+        <div class="phone"><div class="screen">
+          <div class="mapwrap">
+            <svg class="map" viewBox="0 0 270 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="270" height="440" fill="#E8E6E1"/>
+              <g fill="#D8D5CE">
+                <rect x="10" y="20" width="70" height="60" rx="3"/><rect x="100" y="20" width="60" height="60" rx="3"/><rect x="190" y="14" width="70" height="66" rx="3"/>
+                <rect x="10" y="120" width="70" height="80" rx="3"/><rect x="190" y="120" width="70" height="40" rx="3"/><rect x="190" y="170" width="70" height="60" rx="3"/>
+                <rect x="10" y="240" width="70" height="70" rx="3"/><rect x="100" y="250" width="60" height="60" rx="3"/><rect x="190" y="250" width="70" height="70" rx="3"/>
+                <rect x="10" y="340" width="70" height="80" rx="3"/><rect x="100" y="340" width="60" height="80" rx="3"/><rect x="190" y="350" width="70" height="80" rx="3"/>
+              </g>
+              <g stroke="#FFFFFF" stroke-width="12" fill="none"><path d="M0 100H270M0 225H270M0 328H270M90 0V440M176 0V440"/></g>
+              <path d="M58 280 L90 280 L90 225 L176 225 L176 140 L215 140" stroke="#2C5BCB" stroke-width="4" fill="none" stroke-dasharray="2 6" stroke-linecap="round"/>
+              <g font-family="Barlow, Arial, sans-serif" font-weight="700" font-size="13" text-anchor="middle">
+                <path d="M58 296c-10-10-14-16-14-22a14 14 0 0 1 28 0c0 6-4 12-14 22z" fill="#2C5BCB"/><text x="58" y="279" fill="#FFFFFF">1</text>
+                <path d="M130 241c-10-10-14-16-14-22a14 14 0 0 1 28 0c0 6-4 12-14 22z" fill="#2C5BCB"/><text x="130" y="224" fill="#FFFFFF">2</text>
+                <path d="M215 156c-10-10-14-16-14-22a14 14 0 0 1 28 0c0 6-4 12-14 22z" fill="#2C5BCB"/><text x="215" y="139" fill="#FFFFFF">3</text>
+                <path d="M140 400c-10-10-14-16-14-22a14 14 0 0 1 28 0c0 6-4 12-14 22z" fill="#2C5BCB"/><text x="140" y="383" fill="#FFFFFF">4</text>
+              </g>
+            </svg>
+            <span class="mapbtn" style="top:16px;left:14px"><svg><use href="#i-back"/></svg></span>
+            <span class="mapbtn" style="top:16px;right:14px"><svg><use href="#i-up"/></svg></span>
+            <span class="mapbtn" style="top:250px;right:14px"><svg><use href="#i-target"/></svg></span>
+            <div class="pop">
+              <div><i style="background:#2C5BCB"></i>À ramasser<b>4</b></div>
+              <div><i style="background:#E8A317"></i>Partiel<b>1</b></div>
+              <div><i style="background:#17793A"></i>Terminé<b>1</b></div>
+              <div><i style="background:#D23B34"></i>Échec<b>0</b></div>
+            </div>
+            <span class="mk" style="top:62px;left:42px">1</span>
+            <span class="mk" style="top:276px;left:24px">2</span>
+          </div>
+        </div></div>
+        <span class="phone-cap">Exemple d'écran · données fictives</span>
+      </div>
+      <div>
+        <ol class="legend">
+          <li><span class="num">1</span><div><span class="t">Tableau de progression</span><span class="d">Le nombre d'adresses dans chaque état :</span>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px">
+              <span style="display:flex;gap:8px;align-items:center"><i style="width:12px;height:12px;border-radius:50%;background:#2C5BCB;flex:none"></i>À ramasser</span>
+              <span style="display:flex;gap:8px;align-items:center"><i style="width:12px;height:12px;border-radius:50%;background:#E8A317;flex:none"></i>Partiel</span>
+              <span style="display:flex;gap:8px;align-items:center"><i style="width:12px;height:12px;border-radius:50%;background:#17793A;flex:none"></i>Terminé</span>
+              <span style="display:flex;gap:8px;align-items:center"><i style="width:12px;height:12px;border-radius:50%;background:#D23B34;flex:none"></i>Échec</span>
+            </div></div></li>
+          <li><span class="num">2</span><div><span class="t">L'itinéraire</span><span class="d">Chaque adresse de la tournée apparaît sur la carte avec son numéro d'ordre.</span></div></li>
+        </ol>
+        <div class="box info">
+          <svg><use href="#i-info"/></svg>
+          <div>Un coup d'œil à la carte vous dit <b>combien d'adresses il reste</b> avant la fin de tournée.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESEAU ============ -->
+<section class="step" id="reseau">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n alt" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#i-nowifi"/></svg></div>
+      <div>
+        <div class="eyebrow">Cas particulier</div>
+        <h2>Pas de réseau ? Continuez.</h2>
+        <p class="lead">Connexion faible ou absente pendant le ramassage : vous pouvez quand même terminer l'opération.</p>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="fstep"><span class="fi"><svg viewBox="0 0 24 24"><use href="#i-nowifi"/></svg></span><div><span class="t">1. Faites le ramassage normalement</span><span class="d">Remplissez l'écran comme d'habitude, même sans réseau.</span></div></div>
+      <div class="fstep"><span class="fi"><svg viewBox="0 0 24 24"><use href="#i-save"/></svg></span><div><span class="t">2. L'application garde les données</span><span class="d">Elles sont enregistrées dans le téléphone et apparaissent dans la <b>liste des envois</b>.</span></div></div>
+      <div class="fstep"><span class="fi"><svg viewBox="0 0 24 24"><use href="#i-up"/></svg></span><div><span class="t">3. Le réseau revient : envoyez</span><span class="d">Ouvrez la liste des envois et <b>envoyez les données hors ligne</b>.</span></div></div>
+    </div>
+    <div class="demo">
+      <div class="phone-col">
+        <div class="phone"><div class="screen">
+          <div class="sb"><span>11:40</span><span class="ic"><i style="width:3px;height:6px"></i><i style="width:3px;height:8px;opacity:.3"></i><i style="width:3px;height:10px;opacity:.3"></i><i style="width:18px;height:9px;margin-left:4px"></i></span></div>
+          <div class="ab"><svg><use href="#i-back"/></svg><span class="ttl">Liste des envois</span><span class="r"></span></div>
+          <div class="body" style="gap:8px">
+            <div class="card addr-card"><span class="tag up">En attente d'envoi</span><span class="mk" style="top:24px;right:-4px">1</span><span class="no">1</span><div><div class="a">14 Rue Gustave Eiffel, 93200 Saint-Denis</div><div class="muted" style="font-size:11px;margin-top:2px">Entrepôt · Quai 4</div></div></div>
+            <div class="card addr-card"><span class="tag up">En attente d'envoi</span><span class="no">2</span><div><div class="a">8 Allée des Érables, 93200 Saint-Denis</div><div class="muted" style="font-size:11px;margin-top:2px">Boutique</div></div></div>
+            <div class="card addr-card"><span class="no">3</span><div><div class="a">27 Rue du Landy, 93300 Aubervilliers</div><div class="muted" style="font-size:11px;margin-top:2px">Entrepôt · Quai 1</div></div></div>
+            <div style="height:60px"></div>
+            <div class="btn">Envoyer<span class="mk" style="top:-10px;right:-6px">2</span></div>
+          </div>
+          <div class="home-ind"></div>
+        </div></div>
+        <span class="phone-cap">Exemple d'écran · données fictives</span>
+      </div>
+      <div>
+        <ol class="legend">
+          <li><span class="num">1</span><div><span class="t">Étiquette rouge</span><span class="d">Les données de cette adresse sont <b>encore dans le téléphone</b> : elles ne sont pas encore arrivées au système.</span></div></li>
+          <li><span class="num">2</span><div><span class="t">Touchez <span class="ui or">Envoyer</span> dès que le réseau revient</span><span class="d">On ouvre cette liste avec l'<b>icône nuage</b> en haut de l'écran Tâches.</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLEIN ============ -->
+<section class="step" id="plein">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n alt" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><use href="#i-truck"/></svg></div>
+      <div>
+        <div class="eyebrow">Cas particulier</div>
+        <h2>Camion plein avant la fin ?</h2>
+      </div>
+    </div>
+    <div class="special">
+      <div class="sc">
+        <h3><svg viewBox="0 0 24 24"><use href="#i-truck"/></svg>Le véhicule est plein</h3>
+        <p>La tournée n'est pas finie mais il n'y a plus de place ? Dans l'écran <b>Détails de la mission</b>, touchez en bas :</p>
+        <div class="mini-btn">Retour au dépôt pour déchargement</div>
+        <p style="margin-top:14px">Le statut de la mission devient :</p>
+        <span class="statusline">Retour au dépôt pour déchargement</span>
+      </div>
+      <div class="sc">
+        <h3><svg viewBox="0 0 24 24"><use href="#i-flag"/></svg>Ne confondez pas</h3>
+        <p><b>Retour au dépôt pour déchargement</b> = la tournée n'est <b>pas</b> finie, le camion est seulement plein.</p>
+        <p><b>Fin de tournée</b> = toutes les adresses sont traitées. C'est l'étape 5.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 FIN ============ -->
+<section class="step" id="fin">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n">5</div>
+      <div>
+        <div class="eyebrow">Étape 5 · Au dépôt</div>
+        <h2>Fin de tournée</h2>
+        <p class="lead">La tournée est finie quand <b>toutes les adresses</b> sont en <span class="ui gr">Terminé</span>, <span class="ui or">Partiel</span> ou <span class="ui">Échec</span>.</p>
+      </div>
+    </div>
+    <div class="demo rev">
+      <div class="phone-col">
+        <div class="phone"><div class="screen">
+          <div class="sb"><span>17:32</span><span class="ic"><i style="width:3px;height:6px"></i><i style="width:3px;height:8px"></i><i style="width:3px;height:10px"></i><i style="width:18px;height:9px;margin-left:4px"></i></span></div>
+          <div class="ab"><svg><use href="#i-back"/></svg><span class="ttl">Fin de tournée</span><span class="r"></span></div>
+          <div class="body">
+            <div class="card">
+              <div class="lbl"><span class="st">*</span> Numéro de plaque</div>
+              <div class="field mono">GH-482-KL</div>
+              <div class="lbl rel" style="margin-top:12px"><span class="st">*</span> Kilométrage d'arrivée<span class="mk" style="top:-3px;right:-4px">2</span></div>
+              <div class="field input mono">48 367 <span class="muted">km</span></div>
+            </div>
+            <div class="card">
+              <span class="mk" style="top:-9px;right:-6px">3</span>
+              <div class="photos">
+                <div class="ph"><div class="slot full thumb-odo"><span class="odo">048367</span><span class="x">×</span></div><span><span style="color:#E03A3A">*</span> Compteur</span></div>
+                <div class="ph"><div class="slot"><svg><use href="#i-cam"/></svg></div><span>Autres (0/3)</span></div>
+                <div></div>
+              </div>
+            </div>
+            <div class="toast"><svg><use href="#i-check"/></svg>Fin de tournée enregistrée<br><span style="opacity:.75;font-weight:500" class="mono">P202511050005</span></div>
+            <div style="height:120px"></div>
+            <div class="btn">Valider la fin de tournée<span class="mk" style="top:-10px;right:-6px">4</span></div>
+          </div>
+          <div class="home-ind"></div>
+        </div></div>
+        <span class="phone-cap">Exemple d'écran · données fictives</span>
+      </div>
+      <div>
+        <ol class="legend">
+          <li><span class="num off">1</span><div><span class="t">Retournez à l'entrepôt et déchargez</span><span class="d">Déposez tous les colis, puis touchez <b>Fin de tournée</b> dans l'application.</span></div></li>
+          <li><span class="num">2</span><div><span class="t">Kilométrage d'arrivée</span><span class="d">Recopiez le chiffre du compteur du véhicule.</span></div></li>
+          <li><span class="num">3</span><div><span class="t">Photos</span><span class="d">Le compteur obligatoire, plus la plaque et d'autres si besoin. Mêmes règles qu'au départ : <b>appareil photo uniquement</b>, <b>5 photos maximum</b>.</span></div></li>
+          <li><span class="num">4</span><div><span class="t">Validez</span><span class="d">Le message « Fin de tournée enregistrée » confirme que c'est fini. Bonne soirée !</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MEMO ============ -->
+<section class="step" id="memo">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n alt" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-check"/></svg></div>
+      <div>
+        <div class="eyebrow">À garder sous la main</div>
+        <h2>Mémo de la journée</h2>
+      </div>
+    </div>
+    <div class="check">
+      <div class="ck"><h3>Au départ <small>Étape 1</small></h3><ul>
+        <li>Vérifier la plaque (déjà remplie)</li>
+        <li>Saisir le km de départ</li>
+        <li>Photo plaque + photo compteur (appareil photo)</li>
+        <li>Toucher Suivant</li></ul></div>
+      <div class="ck"><h3>À chaque adresse <small>Étapes 2–4</small></h3><ul>
+        <li>Lire les horaires et la note</li>
+        <li>Appeler le client si besoin</li>
+        <li>Compter colis, cartons, palettes</li>
+        <li>Photos + signature</li>
+        <li>Terminé, Partiel ou Échec (+ raison)</li></ul></div>
+      <div class="ck"><h3>À la fin <small>Étape 5</small></h3><ul>
+        <li>Toutes les adresses traitées</li>
+        <li>Décharger au dépôt</li>
+        <li>Saisir le km d'arrivée</li>
+        <li>Photo compteur</li>
+        <li>Valider la fin de tournée</li></ul></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">Guide chauffeur · Application Ramassage · Les écrans de ce guide sont des illustrations ; les adresses et numéros sont fictifs. Une question&nbsp;? Adressez-vous à votre responsable d'exploitation.</div>
+</footer>
+</body>
+</html>
