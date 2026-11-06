@@ -366,6 +366,35 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
 .doc-tag span{font-family:var(--f-body);font-weight:600;font-size:.85rem;color:var(--muted)}
 .num.l{font-size:.95rem}
 
+
+/* ---------- Marly warehouse ---------- */
+.addr{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between;margin-bottom:24px}
+.addr .l{font-size:.85rem;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.addr .a{font-family:var(--f-display);font-weight:800;font-size:1.45rem;line-height:1.15;user-select:all}
+.addr .acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn-s{font:600 .95rem var(--f-body);padding:9px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn-s.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-s:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 24px minmax(0,1.3fr);gap:10px;align-items:stretch;margin-bottom:26px}
+@media (max-width:640px){.doors{grid-template-columns:repeat(3,minmax(0,1fr))}.doors .gap{display:none}.doors .door.office{grid-column:1/-1}}
+.door{border-radius:12px 12px 4px 4px;padding:14px 10px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid;position:relative}
+.door .no{font-family:var(--f-display);font-weight:800;font-size:2.4rem;line-height:1}
+.door .lb{font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.door .ds{font-size:.85rem;line-height:1.3}
+.door.dock{background:var(--ok-soft);border-color:var(--ok);color:var(--ink)}
+.door.dock .no,.door.dock .lb{color:var(--ok)}
+.door.office{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.door.office .no,.door.office .lb{color:var(--accent-ink)}
+.door::after{content:"";position:absolute;left:10%;right:10%;bottom:-8px;height:4px;border-radius:2px;background:var(--road);opacity:.5}
+.gap{display:grid;place-items:center;color:var(--muted);font-weight:800}
+.mflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:8px}
+@media (max-width:780px){.mflow{grid-template-columns:minmax(0,1fr)}}
+.mstep{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;border-top:5px solid var(--c,var(--road))}
+.mstep .t{font-weight:700;display:block;margin-bottom:4px}
+.mstep .d{color:var(--muted);font-size:.95rem}
+.mstep q{font-style:italic;color:var(--ink);font-weight:600}
+@media print{.addr .acts{display:none}.doors{grid-template-columns:repeat(3,minmax(0,1fr)) 24px minmax(0,1.3fr)}.mflow{grid-template-columns:repeat(3,minmax(0,1fr))}.door,.mstep,.addr{break-inside:avoid}}
+
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 
 /* ---------- print / PDF ---------- */
@@ -443,6 +472,7 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
         <a class="chip" href="#reseau">Pas de réseau</a>
         <a class="chip" href="#plein">Camion plein</a>
         <a class="chip" href="#carte">Carte et progression</a>
+        <a class="chip" href="#marly">Entrepôt de Marly</a>
         <a class="chip" href="#tiktok" style="background:var(--road);color:var(--surface)">Collecte TikTok</a>
       </div>
     </div>
@@ -459,6 +489,7 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
     <a href="#carte">Carte</a>
     <a href="#reseau">Pas de réseau</a>
     <a href="#plein">Camion plein</a>
+    <a href="#marly">Entrepôt Marly</a>
     <a href="#fin"><span class="n">5</span>Fin de tournée</a>
     <a href="#tiktok"><span class="n">T</span>TikTok : colis</a>
     <a href="#scan"><span class="n">T</span>Scan</a>
@@ -895,6 +926,42 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
   </div>
 </section>
 
+<!-- ============ MARLY ============ -->
+<section class="step" id="marly">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n alt" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><use href="#i-truck"/></svg></div>
+      <div>
+        <div class="eyebrow">Retour au dépôt</div>
+        <h2>Arrivée à l'entrepôt de Marly</h2>
+        <p class="lead">Tous les colis de collecte se déchargent aux <b>quais 7, 8 et 9</b>.</p>
+      </div>
+    </div>
+
+    <div class="addr">
+      <div><div class="l">Adresse de l'entrepôt GOFO</div><div class="a" id="marly-addr">10 Rue Eugène Pottier, 95670 Marly-la-Ville</div></div>
+      <div class="acts">
+        <button type="button" class="btn-s" id="copy-addr">Copier l'adresse</button>
+        <a class="btn-s pri" href="https://www.google.com/maps/search/?api=1&amp;query=10%20Rue%20Eug%C3%A8ne%20Pottier%2095670%20Marly-la-Ville" target="_blank" rel="noopener">Ouvrir dans Maps</a>
+      </div>
+    </div>
+
+    <div class="doors" aria-label="Portes de l'entrepôt">
+      <div class="door dock"><span class="lb">Quai</span><span class="no">7</span><span class="ds">Colis de collecte</span></div>
+      <div class="door dock"><span class="lb">Quai</span><span class="no">8</span><span class="ds">Colis de collecte</span></div>
+      <div class="door dock"><span class="lb">Quai</span><span class="no">9</span><span class="ds">Colis de collecte</span></div>
+      <span class="gap">…</span>
+      <div class="door office"><span class="lb">Porte</span><span class="no">13</span><span class="ds">Bureau · personnel de l'entrepôt · bons de remise</span></div>
+    </div>
+
+    <div class="mflow">
+      <div class="mstep" style="--c:var(--ok)"><span class="t">1. Allez aux quais 7 à 9</span><span class="d">Déchargez <b>tous</b> les colis de collecte à l'un de ces trois quais.</span></div>
+      <div class="mstep" style="--c:var(--warn)"><span class="t">2. Les quais sont fermés ?</span><span class="d">Allez à pied à la <b>porte 13</b> et prévenez le personnel : <q>Je viens décharger des colis de collecte.</q></span></div>
+      <div class="mstep" style="--c:var(--accent)"><span class="t">3. Avant de repartir</span><span class="d">Notez votre <b>heure d'arrivée</b> sur la CMR (case ARRIVÉE, côté déchargement) et faites tamponner. Voir <a href="#documents">les documents</a>.</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 5 FIN ============ -->
 <section class="step" id="fin">
   <div class="wrap">
@@ -936,7 +1003,7 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
       </div>
       <div>
         <ol class="legend">
-          <li><span class="num off">1</span><div><span class="t">Retournez à l'entrepôt et déchargez</span><span class="d">Déposez tous les colis, puis touchez <b>Fin de tournée</b> dans l'application.</span></div></li>
+          <li><span class="num off">1</span><div><span class="t">Retournez à l'entrepôt et déchargez</span><span class="d">Déposez tous les colis aux <a href="#marly">quais 7 à 9</a>, puis touchez <b>Fin de tournée</b> dans l'application.</span></div></li>
           <li><span class="num">2</span><div><span class="t">Kilométrage d'arrivée</span><span class="d">Recopiez le chiffre du compteur du véhicule.</span></div></li>
           <li><span class="num">3</span><div><span class="t">Photos</span><span class="d">Le compteur obligatoire, plus la plaque et d'autres si besoin. Mêmes règles qu'au départ : <b>appareil photo uniquement</b>, <b>5 photos maximum</b>.</span></div></li>
           <li><span class="num">4</span><div><span class="t">Validez</span><span class="d">Le message « Fin de tournée enregistrée » confirme que c'est fini. Bonne soirée !</span></div></li>
@@ -1043,7 +1110,7 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
       <div class="s6"><span class="n">3</span><div><span class="t">Scannez</span><span class="d">Tous les colis si 40 ou moins. Pas le temps : <b>au minimum 1 à 5</b>.</span></div></div>
       <div class="s6"><span class="n">4</span><div><span class="t">Comptez devant le vendeur</span><span class="d">Comptez <b>tous</b> les colis avec lui et notez le nombre total.</span></div></div>
       <div class="s6"><span class="n">5</span><div><span class="t">Un doute ?</span><span class="d">Photo de l'étiquette + appel ou WhatsApp au responsable collecte. Ne prenez pas le colis sans son accord.</span></div></div>
-      <div class="s6"><span class="n">6</span><div><span class="t">Retour entrepôt</span><span class="d">Directement à l'entrepôt GOFO de Marly-la-Ville, <b>avant 18h00</b>.</span></div></div>
+      <div class="s6"><span class="n">6</span><div><span class="t">Retour entrepôt</span><span class="d">Directement à l'entrepôt GOFO de Marly-la-Ville, <b>avant 18h00</b>, aux <a href="#marly">quais 7 à 9</a>. Notez votre heure d'arrivée sur la CMR.</span></div></div>
     </div>
 
     <div class="box bad" style="margin-top:0">
@@ -1079,9 +1146,9 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
           <div class="f"><span class="k">Délivré le · N° véhicule</span><span class="v">05/11/26 · GH-482-KL</span><span class="mk" style="top:-9px;right:-9px">2</span></div>
           <div class="f" style="grid-column:1/-1"><span class="k">Nombre · Nature des marchandises</span><span class="v">26 colis</span><span class="mk" style="top:-9px;right:-9px">3</span></div>
           <div class="f"><span class="k">Expéditeur</span><span class="v">Boutique Exemple<br>12 Rue de l'Exemple<br>93100 Montreuil</span><span class="mk" style="top:-9px;right:-9px">4</span></div>
-          <div class="f"><span class="k">Destinataire</span><span class="v">GOFO<br>95470 Marly-la-Ville</span><span class="mk" style="top:-9px;right:-9px">5</span></div>
-          <div class="f"><span class="k">Chargement · arrivée / départ</span><span class="v">05/11/26 15h10<br>05/11/26 15h24</span><span class="mk" style="top:-9px;right:-9px">6</span></div>
-          <div class="f" style="display:grid;place-items:center"><div class="stamp">Entrepôt GOFO<b>05 NOV. 2026</b>Service réception</div><span class="mk" style="top:-9px;right:-9px">8</span></div>
+          <div class="f"><span class="k">Destinataire</span><span class="v">GOFO<br>95670 Marly-la-Ville</span><span class="mk" style="top:-9px;right:-9px">5</span></div>
+          <div class="f"><span class="k">Chargement · arrivée / départ</span><span class="v">Arr. 05/11/2026 15:10<br>Dép. 05/11/2026 15:24</span><span class="mk" style="top:-9px;right:-9px">6</span></div>
+          <div class="f" style="outline:3px solid #1E9E4A;outline-offset:1px"><span class="k">Déchargement · arrivée</span><span class="v">Date 05/11/2026<br>Heure 17:42</span><span class="mk" style="top:-9px;right:-9px">8</span><div style="display:flex;justify-content:flex-end;margin-top:4px" class="rel"><div class="stamp" style="transform:rotate(-3deg) scale(.85);transform-origin:right">Entrepôt GOFO<b>05 NOV. 2026</b>Service réception</div><span class="mk" style="bottom:-6px;left:-4px">9</span></div></div>
           <div class="f"><span class="k">Expéditeur · cachet et signature</span><span class="v">~ B. Exemple</span><span class="mk" style="top:-9px;right:-9px">7</span></div>
           <div class="f"><span class="k">Conducteur · nom et signature</span><span class="v">M. Dupont ~</span></div>
         </div>
@@ -1096,8 +1163,20 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
           <li><span class="num">5</span><div><span class="t">Destinataire</span><span class="d">GOFO, entrepôt de Marly-la-Ville.</span></div></li>
           <li><span class="num">6</span><div><span class="t">Chargement</span><span class="d">Date et heure d'<b>arrivée</b> et de <b>départ</b> chez le vendeur.</span></div></li>
           <li><span class="num">7</span><div><span class="t">Signatures chez le vendeur</span><span class="d">Cachet et signature du vendeur, votre nom et votre signature.</span></div></li>
-          <li><span class="num">8</span><div><span class="t">Tampon de l'entrepôt</span><span class="d">À l'arrivée à Marly, le service réception tamponne la CMR.</span></div></li>
+          <li><span class="num">8</span><div><span class="t">Heure d'arrivée à Marly</span><span class="d">Côté <b>DÉCHARGEMENT</b>, à droite, sous l'adresse de Marly : case <b>ARRIVÉE</b>, avec la date et l'heure réelles de votre arrivée. Format <b>JJ/MM/AAAA</b> et <b>HH:MM</b> (24 h).</span></div></li>
+          <li><span class="num">9</span><div><span class="t">Tampon de l'entrepôt</span><span class="d">Le service réception de Marly tamponne la CMR.</span></div></li>
         </ol>
+        <div class="box warn">
+          <svg><use href="#i-warn"/></svg>
+          <div><span class="h">Retour à Marly : remplissez la bonne case</span>
+            <ul>
+              <li>Ne notez pas l'arrivée à Marly dans la zone de <b>gauche</b> : elle correspond au chargement chez le vendeur.</li>
+              <li>Ne confondez pas <b>ARRIVÉE</b> et <b>DÉPART</b>.</li>
+              <li>Le tampon et la signature ne doivent pas <b>masquer</b> la date ni l'heure.</li>
+            </ul>
+            <div style="margin-top:6px">Ces données servent au suivi des délais : chaque CMR doit être complète et lisible.</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1137,6 +1216,10 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
           <svg><use href="#i-info"/></svg>
           <div><span class="h">Le même nombre partout</span><br>Le total compté devant le vendeur doit être identique dans l'application, sur la CMR et sur le bon de remise.</div>
         </div>
+        <div class="box warn">
+          <svg><use href="#i-info"/></svg>
+          <div><span class="h">Où trouver les bons de remise ?</span><br>Nous imprimons régulièrement des bons de remise vierges et les déposons sur le <b>bureau de la porte 13</b> à l'entrepôt de Marly. Il n'en reste plus ? Contactez l'<b>équipe Collecte</b> pour qu'elle en remette.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1166,7 +1249,7 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
         <li>Terminé, Partiel ou Échec (+ raison)</li></ul></div>
       <div class="ck"><h3>À la fin <small>Étape 5</small></h3><ul>
         <li>Toutes les adresses traitées</li>
-        <li>Décharger au dépôt</li>
+        <li>Décharger aux quais 7 à 9 (fermés : porte 13)</li>
         <li>Saisir le km d'arrivée</li>
         <li>Photo compteur</li>
         <li>Valider la fin de tournée</li></ul></div>
@@ -1175,6 +1258,7 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
         <li>Scanner : tout si 40 ou moins, sinon 1 à 5 minimum</li>
         <li>Compter avec le vendeur</li>
         <li>CMR + bon de remise signés</li>
+        <li>Heure d'arrivée à Marly sur la CMR (côté déchargement)</li>
         <li>Entrepôt de Marly avant 18h00</li></ul></div>
     </div>
   </div>
@@ -1184,5 +1268,10 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
 <footer>
   <div class="wrap">Guide chauffeur · Application Ramassage · Les écrans de ce guide sont des illustrations ; les adresses et numéros sont fictifs. Une question&nbsp;? Adressez-vous à votre responsable d'exploitation.</div>
 </footer>
+<script>
+(function(){var b=document.getElementById('copy-addr');if(!b)return;var t=document.getElementById('marly-addr');
+b.addEventListener('click',function(){var txt=t.textContent.trim();function sel(){try{var r=document.createRange();r.selectNodeContents(t);var s=getSelection();s.removeAllRanges();s.addRange(r);}catch(e){}b.textContent='Adresse sélectionnée';}
+try{navigator.clipboard.writeText(txt).then(function(){b.textContent='Adresse copiée';setTimeout(function(){b.textContent="Copier l'adresse";},2000);},sel);}catch(e){sel();}});})();
+</script>
 </body>
 </html>
