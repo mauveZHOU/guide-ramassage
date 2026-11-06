@@ -256,7 +256,7 @@ ol.legend .d{color:var(--muted)}
 .statusline{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:6px 12px;border-radius:8px;background:var(--accent-soft);color:var(--accent-ink);font-weight:700;font-size:.92rem}
 
 /* checklist */
-.check{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.check{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 @media (max-width:780px){.check{grid-template-columns:minmax(0,1fr)}}
 .ck{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px}
 .ck h3{margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
@@ -265,6 +265,106 @@ ol.legend .d{color:var(--muted)}
 .ck li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start}
 .ck li::before{content:"";width:18px;height:18px;border:2px solid var(--muted);border-radius:5px;margin-top:3px}
 footer{padding-block:34px 50px;color:var(--muted);font-size:.9rem}
+
+/* ---------- TikTok part ---------- */
+.part{padding-block:44px 8px}
+.part-band{background:var(--road);color:var(--surface);border-radius:18px;padding:22px 24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.part-band .eyebrow{color:var(--accent)}
+.part-band h2{color:var(--surface)}
+.part-band p{opacity:.85;margin-top:6px;max-width:60ch}
+.alert{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;background:var(--bad);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:24px}
+.alert svg{width:28px;height:28px;color:#fff}
+.alert b{display:block;font-size:1.05rem}
+.marks{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;align-items:center;margin-bottom:28px}
+@media (max-width:720px){.marks{grid-template-columns:minmax(0,1fr)}.marks .ou{justify-self:center}}
+.markcard{background:var(--surface);border:2px solid var(--ink);border-radius:16px;padding:18px;text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+.markcard .cap{color:var(--muted);font-size:.92rem}
+.ou{font-family:var(--f-display);font-weight:800;font-size:1.3rem;color:var(--muted)}
+.mk-tk{display:inline-block;background:#000;color:#fff;font:700 clamp(1.3rem,4vw,1.9rem)/1 Arial,Helvetica,sans-serif;padding:10px 16px;letter-spacing:.01em;white-space:nowrap}
+.mk-tts{display:inline-block;background:#fff;color:#000;border:3px solid #000;font:700 clamp(1.3rem,4vw,1.9rem)/1 Arial,Helvetica,sans-serif;padding:8px 16px}
+.mk-tk.sm,.mk-tts.sm{font-size:.82rem;padding:3px 7px;border-width:2px;vertical-align:middle}
+.decide3{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.drow{display:grid;grid-template-columns:minmax(0,1.2fr) 34px minmax(0,1fr);gap:10px;align-items:stretch}
+@media (max-width:620px){.drow{grid-template-columns:minmax(0,1fr)}.drow .ar{display:none}}
+.drow .qq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:600;display:flex;gap:10px;align-items:center}
+.drow .qq .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--road);color:var(--surface);display:grid;place-items:center;font-family:var(--f-display);font-weight:800}
+.drow .ar{display:grid;place-items:center;color:var(--muted);font-weight:800}
+.drow .rr{border-radius:12px;padding:12px 14px;font-weight:800;font-family:var(--f-display);font-size:1.15rem;display:flex;flex-direction:column;justify-content:center;border:2px solid}
+.rr.yes{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.rr.no{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.rr small{font-family:var(--f-body);font-weight:500;font-size:.85rem;color:var(--ink);margin-top:2px}
+.traps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:28px}
+@media (max-width:780px){.traps{grid-template-columns:minmax(0,1fr)}}
+.trap{background:var(--accent-soft);border-radius:14px;padding:16px}
+.trap .t{font-weight:700;color:var(--accent-ink);display:block;margin-bottom:4px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);margin-bottom:28px}
+table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95rem}
+.marks-t th{background:var(--accent);color:#fff;text-align:left;padding:10px 12px;font-weight:700}
+.marks-t td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:middle}
+.sub-h{margin:6px 0 14px}
+/* schematic labels */
+.labels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:780px){.labels{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
+.sheet{position:relative;width:100%;max-width:200px;aspect-ratio:4/5;background:#fff;border:1.5px solid #222;border-radius:4px;padding:10px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.sheet .hd{height:14px;width:55%;background:#d7d9dd;border-radius:2px}
+.sheet .bc{height:26px;background:repeating-linear-gradient(90deg,#111 0 2px,#fff 2px 3px,#111 3px 4px,#fff 4px 6px,#111 6px 9px,#fff 9px 10px)}
+.sheet .ln{height:6px;background:#e3e5e8;border-radius:2px}
+.sheet .ln.s{width:60%}
+.sheet .qr{position:absolute;right:10px;bottom:12px;width:30px;height:30px;background:repeating-conic-gradient(#111 0 25%,#fff 0 50%) 0 0/8px 8px;border:2px solid #111}
+.sheet .hit{position:absolute;outline:3px solid #E03A3A;outline-offset:2px;border-radius:2px}
+.sheet .hit .mk-tk,.sheet .hit .mk-tts{font-size:9px;padding:3px 5px;border-width:1.5px}
+.lab .cap{font-size:.88rem;color:var(--muted);line-height:1.35}
+.lab .cap b{color:var(--ink)}
+/* scan */
+.scanrule{border:3px solid var(--accent);border-radius:18px;overflow:hidden;background:var(--surface);margin-bottom:28px}
+.scanrule .top{background:var(--accent);color:#fff;font-family:var(--f-display);font-weight:800;font-size:1.3rem;padding:12px 18px;letter-spacing:.02em}
+.scanrule .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;padding:16px}
+@media (max-width:620px){.scanrule .two{grid-template-columns:minmax(0,1fr)}}
+.scanrule .c{border-radius:12px;padding:16px;border:2px solid}
+.scanrule .c.g{border-color:var(--ok);background:var(--ok-soft)}
+.scanrule .c.y{border-color:var(--warn);background:var(--warn-soft)}
+.scanrule .c .t{font-weight:700;display:block;margin-bottom:6px}
+.scanrule .c .big{font-family:var(--f-display);font-weight:800;font-size:2.4rem;line-height:1;display:block;margin:4px 0}
+.scanrule .stop{background:var(--road);color:var(--surface);padding:14px 18px;font-weight:700;display:flex;gap:10px;align-items:center}
+.scanrule .stop svg{width:24px;height:24px;flex:none;color:var(--accent)}
+.steps6{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:24px}
+@media (max-width:720px){.steps6{grid-template-columns:minmax(0,1fr)}}
+.s6{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px}
+.s6 .n{width:32px;height:32px;border-radius:50%;background:var(--road);color:var(--surface);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.1rem}
+.s6 .t{font-weight:700;display:block}
+.s6 .d{color:var(--muted);font-size:.95rem}
+.s6 q{font-style:italic;color:var(--ink)}
+/* paper forms */
+.paper{background:#FFFDF8;color:#2A2420;border:1px solid #D9CFC2;border-radius:6px;box-shadow:0 10px 30px -18px rgba(0,0,0,.4);padding:14px;font-size:11px;line-height:1.3;position:relative;width:100%;max-width:440px}
+.paper .pt{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;border-bottom:1.5px solid #E2876A;padding-bottom:6px;margin-bottom:8px}
+.paper .pt .ttl{color:#D2603F;font-weight:800;font-family:var(--f-display);font-size:14px;text-transform:uppercase;line-height:1.05}
+.paper .pt .nb{font:700 13px ui-monospace,Menlo,monospace}
+.paper .grid{display:grid;gap:6px}
+.paper .f{border:1px solid #E7B9A6;border-radius:5px;padding:5px 7px;position:relative;min-width:0}
+.paper .f .k{color:#D2603F;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.04em;display:block}
+.paper .f .v{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;color:#1D3FA0;font-size:13px;line-height:1.2}
+.paper .f.blank .v{color:#B9AFA5;font-family:var(--f-body);font-size:10px}
+.paper .stamp{border:2px solid #2B4A9B;color:#2B4A9B;border-radius:4px;padding:4px 6px;text-align:center;font-weight:700;font-size:9px;transform:rotate(-3deg)}
+.paper .stamp b{display:block;font-size:12px;border:1.5px solid #2B4A9B;margin:3px 0;padding:2px}
+.paper .mk{box-shadow:0 0 0 2.5px #FFFDF8,0 2px 6px rgba(0,0,0,.25)}
+.paper.bw{background:#FFFFFF;color:#111;border-color:#CFCFCF}
+.paper.bw .h1{font:800 16px/1.1 Arial,Helvetica,sans-serif}
+.paper.bw .h2{font:700 11px/1.3 Arial,Helvetica,sans-serif;margin-bottom:8px}
+.paper.bw .sec{background:#EEE;font-weight:700;padding:4px 7px;margin-top:8px;position:relative}
+.paper.bw .pbox{border:1px solid #BBB;border-top:0;padding:6px 7px;position:relative}
+.paper.bw .row2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.paper.bw .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.paper.bw .fl{display:flex;gap:4px;align-items:baseline;min-width:0}
+.paper.bw .fl .k{font-weight:700;font-size:9.5px;white-space:nowrap}
+.paper.bw .fl .v{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;color:#1D3FA0;font-size:12px;border-bottom:1px solid #999;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.paper.bw .cb{display:flex;gap:6px;align-items:center;font-size:10px}
+.paper.bw .cb i{width:11px;height:11px;border:1.3px solid #333;flex:none;display:grid;place-items:center;font-style:normal;font-weight:800;color:#1D3FA0;font-size:11px}
+.docs{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:40px;align-items:start;margin-bottom:44px}
+@media (max-width:860px){.docs{grid-template-columns:minmax(0,1fr)}.docs .paper{justify-self:center}}
+.doc-tag{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-family:var(--f-display);font-weight:800;font-size:1.35rem;margin-bottom:14px}
+.doc-tag span{font-family:var(--f-body);font-weight:600;font-size:.85rem;color:var(--muted)}
+.num.l{font-size:.95rem}
 
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 
@@ -283,7 +383,13 @@ footer{padding-block:34px 50px;color:var(--muted);font-size:.9rem}
   .phone{width:262px;box-shadow:none}
   .mapwrap{height:380px}
   .decide,.flow{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .check{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .check{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .part{break-before:page;padding-block:0 16px}
+  .labels{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .docs{grid-template-columns:380px minmax(0,1fr);gap:26px;margin-bottom:20px;break-inside:avoid}
+  .traps,.scanrule .two{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .scanrule .two{grid-template-columns:1fr 1fr}
+  .scanrule,.tbl-wrap,.lab,.s6,.drow{break-inside:avoid}
   .special{grid-template-columns:1fr 1fr}
   .dcard,.sc,.ck,.box,.fstep{break-inside:avoid}
   .step-head{margin-bottom:18px}
@@ -337,6 +443,7 @@ footer{padding-block:34px 50px;color:var(--muted);font-size:.9rem}
         <a class="chip" href="#reseau">Pas de réseau</a>
         <a class="chip" href="#plein">Camion plein</a>
         <a class="chip" href="#carte">Carte et progression</a>
+        <a class="chip" href="#tiktok" style="background:var(--road);color:var(--surface)">Collecte TikTok</a>
       </div>
     </div>
   </div>
@@ -353,6 +460,9 @@ footer{padding-block:34px 50px;color:var(--muted);font-size:.9rem}
     <a href="#reseau">Pas de réseau</a>
     <a href="#plein">Camion plein</a>
     <a href="#fin"><span class="n">5</span>Fin de tournée</a>
+    <a href="#tiktok"><span class="n">T</span>TikTok : colis</a>
+    <a href="#scan"><span class="n">T</span>Scan</a>
+    <a href="#documents"><span class="n">T</span>CMR et bon de remise</a>
     <a href="#memo">Mémo</a>
   </div>
 </nav>
@@ -836,6 +946,202 @@ footer{padding-block:34px 50px;color:var(--muted);font-size:.9rem}
   </div>
 </section>
 
+<!-- ============ PARTIE TIKTOK ============ -->
+<div class="part" id="partie-tiktok">
+  <div class="wrap">
+    <div class="part-band">
+      <div class="big-n" style="background:var(--accent)">T</div>
+      <div><div class="eyebrow">Partie 2</div><h2>Collecte TikTok Shop</h2><p>Règles en plus pour chaque collecte TikTok : reconnaître les bons colis, scanner, compter et remplir les documents.</p></div>
+    </div>
+  </div>
+</div>
+
+<section class="step" id="tiktok">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n">T1</div>
+      <div>
+        <div class="eyebrow">TikTok · Avant de prendre un colis</div>
+        <h2>Reconnaître un colis TikTok</h2>
+        <p class="lead">Regardez <b>l'étiquette de chaque colis</b>. Un colis TikTok porte l'un de ces deux marquages.</p>
+      </div>
+    </div>
+
+    <div class="alert"><svg><use href="#i-warn"/></svg><div><b>Ne vous fiez jamais au logo du transporteur.</b>Seul le marquage sur l'étiquette compte.</div></div>
+
+    <div class="marks">
+      <div class="markcard"><span class="cap">Carré noir, texte blanc (le chiffre peut changer)</span><span class="mk-tk">TK CBT-4 / 5 / 6 / 8</span></div>
+      <span class="ou">OU</span>
+      <div class="markcard"><span class="cap">Étiquette GOFO avec la case</span><span class="mk-tts">TTS-PU</span></div>
+    </div>
+
+    <h3 class="sub-h">Je décide en 3 secondes</h3>
+    <div class="decide3">
+      <div class="drow"><div class="qq"><span class="n">1</span>Je vois un carré noir « TK CBT » sur l'étiquette ?</div><span class="ar">OUI →</span><div class="rr yes">✔ Je prends</div></div>
+      <div class="drow"><div class="qq"><span class="n">2</span>Sinon : c'est une étiquette GOFO avec « TTS-PU » ?</div><span class="ar">OUI →</span><div class="rr yes">✔ Je prends</div></div>
+      <div class="drow"><div class="qq"><span class="n">3</span>Ni l'un ni l'autre ?</div><span class="ar">→</span><div class="rr no">✘ Je ne prends pas<small>Un doute : photo + appel au responsable collecte</small></div></div>
+    </div>
+
+    <h3 class="sub-h">Les 3 pièges à éviter</h3>
+    <div class="traps">
+      <div class="trap"><span class="t">Piège 1 · Le logo</span>DHL, Poste Italiane, PPL, InPost, Colis Privé, DPD, PostNL, An Post, Mondial Relay, Cainiao… Le logo <b>ne dit pas</b> si c'est TikTok. Seul le marquage compte.</div>
+      <div class="trap"><span class="t">Piège 2 · L'emplacement</span>Le marquage est <b>petit</b> et change de place : en haut, en bas, à gauche, ou <b>à la verticale sur le bord</b>. Regardez toute l'étiquette.</div>
+      <div class="trap"><span class="t">Piège 3 · Les autres colis</span>Un colis Colissimo, Chronopost, UPS… <b>sans « TK CBT »</b> vient d'une autre vente : il reste chez le vendeur.</div>
+    </div>
+
+    <h3 class="sub-h">Où chercher le marquage : exemples</h3>
+    <p style="color:var(--muted);margin-bottom:14px">Le cadre rouge montre le marquage. Tous ces colis sont à collecter ✔</p>
+    <div class="labels" style="margin-bottom:12px">
+      <div class="lab"><div class="sheet"><span class="hd"></span><span class="bc"></span><span class="ln"></span><span class="ln s"></span><span class="ln"></span><span class="ln s"></span><span class="qr"></span><span class="hit" style="top:8px;right:10px"><span class="mk-tts">TTS-PU</span></span></div><span class="cap"><b>TTS-PU</b> · étiquette GOFO · France<br>en haut à droite</span></div>
+      <div class="lab"><div class="sheet"><span class="hd"></span><span class="bc"></span><span class="ln"></span><span class="ln s"></span><span class="ln"></span><span class="ln s"></span><span class="qr"></span><span class="hit" style="top:8px;left:50%;transform:translateX(-10%)"><span class="mk-tk">TK CBT-8</span></span></div><span class="cap"><b>TK CBT-8</b> · étiquette GOFO · France<br>en haut</span></div>
+      <div class="lab"><div class="sheet"><span class="hd"></span><span class="bc"></span><span class="ln"></span><span class="ln s"></span><span class="ln"></span><span class="ln s"></span><span class="hit" style="bottom:12px;right:12px"><span class="mk-tk">TK CBT-6</span></span></div><span class="cap"><b>TK CBT-6</b> · Mondial Relay · France<br>en bas</span></div>
+      <div class="lab"><div class="sheet"><span class="hd"></span><span class="bc"></span><span class="ln"></span><span class="ln s"></span><span class="ln"></span><span class="hit" style="bottom:16px;left:12px"><span class="mk-tk">TK CBT-4</span></span><span class="qr"></span></div><span class="cap"><b>TK CBT-4</b> · Cainiao · Europe<br>en bas</span></div>
+      <div class="lab"><div class="sheet" style="padding-left:62px"><span class="hd"></span><span class="bc"></span><span class="ln"></span><span class="ln s"></span><span class="ln"></span><span class="ln s"></span><span class="qr"></span><span class="hit" style="top:30px;left:8px"><span class="mk-tk">TK CBT-5</span></span></div><span class="cap"><b>TK CBT-5</b> · Maersk (Poste Italiane, DHL, Colis Privé…) · Europe<br>à gauche ou en haut</span></div>
+      <div class="lab"><div class="sheet" style="padding-right:30px"><span class="hd"></span><span class="bc"></span><span class="ln"></span><span class="ln s"></span><span class="ln"></span><span class="ln s"></span><span class="hit" style="top:50%;right:-20px;transform:translateY(-50%) rotate(90deg)"><span class="mk-tk">TK CBT-4</span></span></div><span class="cap"><b>TK CBT-4</b> · Cainiao / Poste Italiane<br><b>à la verticale</b> sur le bord droit : tournez le colis</span></div>
+    </div>
+    <p class="phone-cap" style="text-align:left;margin-bottom:28px">Étiquettes simplifiées pour l'exemple.</p>
+
+    <h3 class="sub-h">Tableau des marquages</h3>
+    <div class="tbl-wrap">
+      <table class="marks-t">
+        <thead><tr><th>Marquage sur l'étiquette</th><th>Type d'étiquette</th><th>Destination du colis</th><th>Exemples de logos sur l'étiquette</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mk-tts sm">TTS-PU</span> <span style="color:var(--muted)">(sans TK CBT)</span></td><td>Étiquette GOFO</td><td>France</td><td>GOFO</td></tr>
+          <tr><td><span class="mk-tk sm">TK CBT-8</span></td><td>Étiquette GOFO (TTS-CBT)</td><td>France</td><td>GOFO</td></tr>
+          <tr><td><span class="mk-tk sm">TK CBT-6</span></td><td>Mondial Relay</td><td>France (point relais / locker)</td><td>Mondial Relay</td></tr>
+          <tr><td><span class="mk-tk sm">TK CBT-5</span></td><td>Maersk</td><td>Europe (hors France)</td><td>Poste Italiane, DHL, PPL, Colis Privé, InPost, DPD, CTT, Express One, Geniki Taxydromiki…</td></tr>
+          <tr><td><span class="mk-tk sm">TK CBT-4</span></td><td>Cainiao</td><td>Europe (hors France)</td><td>Poste Italiane, Cainiao / Ecoscooting, An Post, PostNL, DHL…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="scan">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n">T2</div>
+      <div>
+        <div class="eyebrow">TikTok · Chez le vendeur</div>
+        <h2>Scanner = prouver la collecte</h2>
+        <p class="lead">Scannez les colis avec l'application, dans la <b>zone de scan</b> en haut de l'écran <a href="#ramassage">Opération de ramassage</a>.</p>
+      </div>
+    </div>
+    <div class="scanrule">
+      <div class="top">Combien de colis scanner ?</div>
+      <div class="two">
+        <div class="c g"><span class="t">Collecte de 40 colis ou moins</span>Scannez <b>tous les colis</b>, un par un.</div>
+        <div class="c y"><span class="t">Pas le temps de tout scanner ?</span>Scannez au minimum<span class="big">1 à 5 colis</span>Ce scan est la preuve que la collecte a bien été faite.</div>
+      </div>
+      <div class="stop"><svg><use href="#i-warn"/></svg>Ne repartez jamais sans avoir scanné au moins 1 colis : sans scan, rien ne prouve que vous êtes passé.</div>
+    </div>
+
+    <h3 class="sub-h" id="tiktok-etapes">Sur place, étape par étape</h3>
+    <div class="steps6">
+      <div class="s6"><span class="n">1</span><div><span class="t">Présentez-vous</span><span class="d"><q>Bonjour, GOFO. Je viens chercher les colis TikTok.</q></span></div></div>
+      <div class="s6"><span class="n">2</span><div><span class="t">Identifiez chaque colis</span><span class="d"><span class="mk-tk sm">TK CBT</span> ou GOFO <span class="mk-tts sm">TTS-PU</span>. Étiquette bien collée et lisible.</span></div></div>
+      <div class="s6"><span class="n">3</span><div><span class="t">Scannez</span><span class="d">Tous les colis si 40 ou moins. Pas le temps : <b>au minimum 1 à 5</b>.</span></div></div>
+      <div class="s6"><span class="n">4</span><div><span class="t">Comptez devant le vendeur</span><span class="d">Comptez <b>tous</b> les colis avec lui et notez le nombre total.</span></div></div>
+      <div class="s6"><span class="n">5</span><div><span class="t">Un doute ?</span><span class="d">Photo de l'étiquette + appel ou WhatsApp au responsable collecte. Ne prenez pas le colis sans son accord.</span></div></div>
+      <div class="s6"><span class="n">6</span><div><span class="t">Retour entrepôt</span><span class="d">Directement à l'entrepôt GOFO de Marly-la-Ville, <b>avant 18h00</b>.</span></div></div>
+    </div>
+
+    <div class="box bad" style="margin-top:0">
+      <svg><use href="#i-warn"/></svg>
+      <div><span class="h">À ne pas collecter</span><br>Je laisse le colis chez le vendeur et je préviens le responsable collecte (avec photo) si :
+        <ul>
+          <li>il n'y a <b>ni marquage TK CBT ni étiquette GOFO TTS-PU</b> (ex. : colis Colissimo, Chronopost, UPS… venant d'une autre vente que TikTok) ;</li>
+          <li>il n'a <b>pas d'étiquette</b>, ou l'étiquette est déchirée, illisible, le code-barres abîmé ;</li>
+          <li>le colis est <b>ouvert, écrasé ou mouillé</b>.</li>
+        </ul>
+        <div style="margin-top:8px">Ces colis refusés sont à noter sur le <a href="#documents">bon de remise</a> (quantité et motif).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="documents">
+  <div class="wrap">
+    <div class="step-head">
+      <div class="big-n">T3</div>
+      <div>
+        <div class="eyebrow">TikTok · Les papiers</div>
+        <h2>Deux documents à remplir</h2>
+        <p class="lead">En plus de l'application : la <b>lettre de voiture (CMR)</b> et le <b>bon de remise des colis</b>. Faites-les signer chez le vendeur, puis tamponner à l'entrepôt.</p>
+      </div>
+    </div>
+
+    <div class="docs">
+      <div class="paper" aria-label="Exemple de lettre de voiture remplie">
+        <div class="pt"><div><div style="font-weight:700;font-size:10px;color:#6B5E55">Votre transporteur</div><div class="ttl">Lettre de voiture<br>nationale</div></div><span class="nb">N° 000000</span></div>
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <div class="f"><span class="k">Donneur d'ordre</span><span class="v">GOFO</span><span class="mk" style="top:-9px;right:-9px">1</span></div>
+          <div class="f"><span class="k">Délivré le · N° véhicule</span><span class="v">05/11/26 · GH-482-KL</span><span class="mk" style="top:-9px;right:-9px">2</span></div>
+          <div class="f" style="grid-column:1/-1"><span class="k">Nombre · Nature des marchandises</span><span class="v">26 colis</span><span class="mk" style="top:-9px;right:-9px">3</span></div>
+          <div class="f"><span class="k">Expéditeur</span><span class="v">Boutique Exemple<br>12 Rue de l'Exemple<br>93100 Montreuil</span><span class="mk" style="top:-9px;right:-9px">4</span></div>
+          <div class="f"><span class="k">Destinataire</span><span class="v">GOFO<br>95470 Marly-la-Ville</span><span class="mk" style="top:-9px;right:-9px">5</span></div>
+          <div class="f"><span class="k">Chargement · arrivée / départ</span><span class="v">05/11/26 15h10<br>05/11/26 15h24</span><span class="mk" style="top:-9px;right:-9px">6</span></div>
+          <div class="f" style="display:grid;place-items:center"><div class="stamp">Entrepôt GOFO<b>05 NOV. 2026</b>Service réception</div><span class="mk" style="top:-9px;right:-9px">8</span></div>
+          <div class="f"><span class="k">Expéditeur · cachet et signature</span><span class="v">~ B. Exemple</span><span class="mk" style="top:-9px;right:-9px">7</span></div>
+          <div class="f"><span class="k">Conducteur · nom et signature</span><span class="v">M. Dupont ~</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="doc-tag">CMR · Lettre de voiture <span>carnet du transporteur</span></div>
+        <ol class="legend">
+          <li><span class="num">1</span><div><span class="t">Donneur d'ordre</span><span class="d">GOFO.</span></div></li>
+          <li><span class="num">2</span><div><span class="t">Date et véhicule</span><span class="d">La date du jour et la plaque d'immatriculation.</span></div></li>
+          <li><span class="num">3</span><div><span class="t">Nombre de colis</span><span class="d">Le total compté <b>devant le vendeur</b>.</span></div></li>
+          <li><span class="num">4</span><div><span class="t">Expéditeur</span><span class="d">Nom et adresse du vendeur.</span></div></li>
+          <li><span class="num">5</span><div><span class="t">Destinataire</span><span class="d">GOFO, entrepôt de Marly-la-Ville.</span></div></li>
+          <li><span class="num">6</span><div><span class="t">Chargement</span><span class="d">Date et heure d'<b>arrivée</b> et de <b>départ</b> chez le vendeur.</span></div></li>
+          <li><span class="num">7</span><div><span class="t">Signatures chez le vendeur</span><span class="d">Cachet et signature du vendeur, votre nom et votre signature.</span></div></li>
+          <li><span class="num">8</span><div><span class="t">Tampon de l'entrepôt</span><span class="d">À l'arrivée à Marly, le service réception tamponne la CMR.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="docs">
+      <div class="paper bw" aria-label="Exemple de bon de remise des colis rempli">
+        <div class="h1">GOFO FRANCE</div>
+        <div class="h2">PICKUP HANDOVER FORM · BON DE REMISE DES COLIS</div>
+        <div class="rel" style="display:flex;flex-direction:column;gap:5px">
+          <span class="mk" style="top:-30px;right:-10px">A</span>
+          <div class="row2"><div class="fl"><span class="k">Client :</span><span class="v">Boutique Exemple</span></div><div class="fl"><span class="k">Date :</span><span class="v">05/11/2026</span></div></div>
+          <div class="fl"><span class="k">Entrepôt destinataire :</span><span class="v">GOFO Marly-la-Ville</span></div>
+          <div class="fl"><span class="k">Transporteur :</span><span class="v">Votre société</span></div>
+          <div class="row2"><div class="fl"><span class="k">Chauffeur :</span><span class="v">M. Dupont</span></div><div class="fl"><span class="k">Immat. :</span><span class="v">GH-482-KL</span></div></div>
+        </div>
+        <div class="sec">1. Quantités à l'enlèvement<span class="mk" style="top:-4px;right:-10px">B</span></div>
+        <div class="pbox row2"><div class="fl"><span class="k">Pris en charge</span><span class="v">26</span></div><div class="fl"><span class="k">Refusés</span><span class="v">2</span></div></div>
+        <div class="sec">2. Mode de comptage<span class="mk" style="top:-4px;right:-10px">C</span></div>
+        <div class="pbox" style="display:flex;flex-direction:column;gap:3px"><span class="cb"><i></i>Comptés par le chauffeur</span><span class="cb"><i>✓</i>Comptés ensemble par le chauffeur et l'expéditeur</span><span class="cb"><i></i>Quantité déclarée par l'expéditeur, non vérifiée</span></div>
+        <div class="sec">3. Liste des colis<span class="mk" style="top:-4px;right:-10px">D</span></div>
+        <div class="pbox row2"><span class="cb"><i>✓</i>Fournie</span><span class="cb"><i></i>Non fournie</span></div>
+        <div class="sec">4. Anomalies · quantité et motif<span class="mk" style="top:-4px;right:-10px">E</span></div>
+        <div class="pbox"><div class="fl"><span class="v">2 colis sans marquage TK CBT (Colissimo)</span></div></div>
+        <div class="sec">5. Confirmation de remise<span class="mk" style="top:-4px;right:-10px">F</span></div>
+        <div class="pbox row3" style="font-size:9px"><div><b>Client / expéditeur</b><div class="v" style="font-family:'Segoe Print','Bradley Hand',cursive;color:#1D3FA0;font-size:12px">~ B.E.</div>15:24</div><div><b>Chauffeur</b><div style="font-family:'Segoe Print','Bradley Hand',cursive;color:#1D3FA0;font-size:12px">Dupont ~</div>15:24</div><div><b>Entrepôt</b><div style="color:#2B4A9B;font-weight:700">cachet</div>17:40</div></div>
+      </div>
+      <div>
+        <div class="doc-tag">Bon de remise des colis <span>formulaire GOFO</span></div>
+        <ol class="legend">
+          <li><span class="num l">A</span><div><span class="t">En-tête</span><span class="d">Client (le vendeur), date, entrepôt destinataire, transporteur, votre nom, la plaque.</span></div></li>
+          <li><span class="num l">B</span><div><span class="t">Quantités</span><span class="d"><b>Pris en charge</b> = colis que vous emportez. <b>Refusés</b> = colis laissés chez le vendeur.</span></div></li>
+          <li><span class="num l">C</span><div><span class="t">Mode de comptage</span><span class="d">Pour TikTok, cochez <b>« Comptés ensemble par le chauffeur et l'expéditeur »</b> : vous comptez avec le vendeur.</span></div></li>
+          <li><span class="num l">D</span><div><span class="t">Liste des colis</span><span class="d">Le vendeur vous a-t-il donné une liste ? Cochez fournie ou non fournie.</span></div></li>
+          <li><span class="num l">E</span><div><span class="t">Anomalies</span><span class="d">Pour chaque colis refusé : la quantité et le motif (pas de marquage, étiquette illisible, colis abîmé…).</span></div></li>
+          <li><span class="num l">F</span><div><span class="t">Signatures</span><span class="d">Le vendeur et vous chez le vendeur, l'entrepôt à votre arrivée. Avec date et heure.</span></div></li>
+        </ol>
+        <div class="box info">
+          <svg><use href="#i-info"/></svg>
+          <div><span class="h">Le même nombre partout</span><br>Le total compté devant le vendeur doit être identique dans l'application, sur la CMR et sur le bon de remise.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ MEMO ============ -->
 <section class="step" id="memo">
   <div class="wrap">
@@ -864,6 +1170,12 @@ footer{padding-block:34px 50px;color:var(--muted);font-size:.9rem}
         <li>Saisir le km d'arrivée</li>
         <li>Photo compteur</li>
         <li>Valider la fin de tournée</li></ul></div>
+      <div class="ck"><h3>Collecte TikTok <small>T1–T3</small></h3><ul>
+        <li>Marquage TK CBT ou TTS-PU sur chaque colis</li>
+        <li>Scanner : tout si 40 ou moins, sinon 1 à 5 minimum</li>
+        <li>Compter avec le vendeur</li>
+        <li>CMR + bon de remise signés</li>
+        <li>Entrepôt de Marly avant 18h00</li></ul></div>
     </div>
   </div>
 </section>
