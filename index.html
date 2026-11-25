@@ -78,14 +78,22 @@ header.top .meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;color:
 /* ---------- sticky nav ---------- */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 nav.jump{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-nav.jump .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+nav.jump .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:8px;scrollbar-width:none;align-items:center}
+nav.jump .nrow.cases{padding-top:0}
+nav.jump .nl{flex:none;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px;min-width:7.5em}
+nav.jump a.c{background:var(--accent-soft);border-color:transparent;color:var(--accent-ink)}
+nav.jump a.c-scan{background:var(--bad);border-color:var(--bad);color:#fff}
+nav.jump a.c-tt{background:var(--road);border-color:var(--road);color:var(--surface)}
+nav.jump a.c-scan:hover,nav.jump a.c-tt:hover,nav.jump a.c-scan:focus-visible,nav.jump a.c-tt:focus-visible{color:#fff;border-color:var(--accent);background:var(--accent)}
+@media (max-width:620px){nav.jump .nl{min-width:0;font-size:.68rem}}
 nav.jump .wrap::-webkit-scrollbar{display:none}
 nav.jump a{flex:none;color:var(--ink);text-decoration:none;font-weight:600;font-size:.92rem;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface)}
 nav.jump a:hover,nav.jump a:focus-visible{border-color:var(--accent);color:var(--accent-ink);outline:none}
 nav.jump a .n{color:var(--accent-ink);font-family:var(--f-display);font-weight:800;margin-right:4px}
 
 /* ---------- sections ---------- */
-section.step{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section.step{padding-block:56px;border-bottom:1px solid var(--line);scroll-margin-top:104px}
+#scan-colis,#tiktok-etapes{scroll-margin-top:112px}
 .step-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:28px}
 .big-n{flex:none;width:58px;height:58px;border-radius:14px;background:var(--accent);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.9rem}
 .big-n.alt{background:var(--road);color:var(--surface)}
@@ -395,6 +403,27 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
 .mstep q{font-style:italic;color:var(--ink);font-weight:600}
 @media print{.addr .acts{display:none}.doors{grid-template-columns:repeat(3,minmax(0,1fr)) 24px minmax(0,1.3fr)}.mflow{grid-template-columns:repeat(3,minmax(0,1fr))}.door,.mstep,.addr{break-inside:avoid}}
 
+
+/* ---------- scan highlight ---------- */
+.scan.hl{outline:3px solid #E03A3A;outline-offset:3px;background:#fff}
+.scanband{display:grid;grid-template-columns:230px minmax(0,1fr);gap:26px;align-items:center;border:3px solid var(--bad);background:var(--bad-soft);border-radius:18px;padding:22px 24px;margin-bottom:36px}
+@media (max-width:720px){.scanband{grid-template-columns:minmax(0,1fr)}.scanband .sbv{justify-self:center}}
+.sbv{width:230px;max-width:100%;background:var(--app-bg);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:8px;color:var(--app-ink);font-family:var(--f-body);box-shadow:0 10px 24px -16px rgba(0,0,0,.45)}
+.sbv .bar{background:var(--app-card);border-radius:10px;padding:8px 10px;font-weight:700;font-size:12px;text-align:center}
+.sbv .zone{position:relative;background:#fff;border:2px solid #D3D7DD;border-radius:12px;height:74px;display:grid;place-items:center;outline:3px solid #E03A3A;outline-offset:4px;margin:6px 4px}
+.sbv .zone svg{width:34px;height:34px;stroke:#7A818C;fill:none;stroke-width:1.8}
+.sbv .zone .tap{position:absolute;right:16px;bottom:8px;width:22px;height:22px;border-radius:50%;background:rgba(228,82,26,.25);box-shadow:0 0 0 6px rgba(228,82,26,.12)}
+.sbv .cap{font-size:11px;font-weight:700;color:#C93434;text-align:center;letter-spacing:.06em;text-transform:uppercase}
+.sbv .ghost{height:10px;border-radius:5px;background:#E3E5E8}
+.scanband .tag-new{display:inline-block;background:var(--bad);color:#fff;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:99px}
+.scanband h3{font-size:1.6rem;margin:8px 0 6px}
+.howto{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.howto li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.howto .n{width:28px;height:28px;border-radius:50%;background:var(--bad);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-weight:800}
+.legend li.hot{background:var(--bad-soft);border:2px solid var(--bad);border-radius:12px;padding:10px 12px;margin:-4px -14px}
+.legend li.hot .num{background:var(--bad)}
+@media print{.scanband{break-inside:avoid;grid-template-columns:200px minmax(0,1fr)}}
+
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 
 /* ---------- print / PDF ---------- */
@@ -463,7 +492,7 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
       <ol class="stops">
         <li><a href="#vehicule"><span class="stop-dot">1</span><div><span class="stop-t">Vérifier le véhicule</span><span class="stop-d">Plaque, km de départ, photos</span></div></a></li>
         <li><a href="#adresses"><span class="stop-dot">2</span><div><span class="stop-t">Ouvrir la liste des adresses</span><span class="stop-d">Ordre, horaires, consignes</span></div></a></li>
-        <li><a href="#ramassage"><span class="stop-dot">3</span><div><span class="stop-t">Ramasser à chaque adresse</span><span class="stop-d">Compter, photographier, faire signer</span></div></a></li>
+        <li><a href="#ramassage"><span class="stop-dot">3</span><div><span class="stop-t">Ramasser à chaque adresse</span><span class="stop-d"><b>Scanner</b>, compter, photographier, faire signer</span></div></a></li>
         <li><a href="#resultat"><span class="stop-dot">4</span><div><span class="stop-t">Valider le résultat</span><span class="stop-d">Terminé, Partiel ou Échec</span></div></a></li>
         <li><a href="#fin"><span class="stop-dot">5</span><div><span class="stop-t">Fin de tournée</span><span class="stop-d">Déchargement, km d'arrivée, photos</span></div></a></li>
       </ol>
@@ -480,21 +509,25 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
 </header>
 
 <nav class="jump" aria-label="Sommaire">
-  <div class="wrap">
+  <div class="wrap nrow">
+    <span class="nl">Étapes</span>
     <a href="#accueil">Accueil</a>
     <a href="#vehicule"><span class="n">1</span>Véhicule</a>
     <a href="#adresses"><span class="n">2</span>Adresses</a>
     <a href="#ramassage"><span class="n">3</span>Ramassage</a>
     <a href="#resultat"><span class="n">4</span>Résultat</a>
-    <a href="#carte">Carte</a>
-    <a href="#reseau">Pas de réseau</a>
-    <a href="#plein">Camion plein</a>
-    <a href="#marly">Entrepôt Marly</a>
     <a href="#fin"><span class="n">5</span>Fin de tournée</a>
-    <a href="#tiktok"><span class="n">T</span>TikTok : colis</a>
-    <a href="#scan"><span class="n">T</span>Scan</a>
-    <a href="#documents"><span class="n">T</span>CMR et bon de remise</a>
     <a href="#memo">Mémo</a>
+  </div>
+  <div class="wrap nrow cases">
+    <span class="nl">Cas particuliers</span>
+    <a href="#scan-colis" class="c-scan">Scan des colis</a>
+    <a href="#reseau" class="c">Pas de réseau</a>
+    <a href="#plein" class="c">Camion plein</a>
+    <a href="#carte" class="c">Carte et progression</a>
+    <a href="#marly" class="c">Entrepôt de Marly</a>
+    <a href="#tiktok" class="c-tt">Collecte TikTok</a>
+    <a href="#documents" class="c-tt">CMR et bon de remise</a>
   </div>
 </nav>
 
@@ -690,6 +723,26 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
         <p class="lead">Touchez l'adresse dans la liste. L'écran <b>Opération de ramassage</b> s'ouvre. Remplissez-le de haut en bas.</p>
       </div>
     </div>
+    <div class="scanband" id="scan-colis">
+      <div class="sbv" aria-hidden="true">
+        <div class="bar">Opération de ramassage</div>
+        <div class="ghost" style="width:80%"></div>
+        <div class="zone"><svg><use href="#i-scan"/></svg><span class="tap"></span></div>
+        <div class="cap">Zone de scan</div>
+        <div class="ghost"></div><div class="ghost" style="width:60%"></div>
+      </div>
+      <div>
+        <span class="tag-new">Obligatoire</span>
+        <h3>Scannez les colis sur place</h3>
+        <p>La plupart des clients demandent maintenant un <b>scan sur place</b>. Le scan prouve que vous êtes passé et que vous avez pris les colis.</p>
+        <ol class="howto">
+          <li><span class="n">1</span><span>Touchez la <b>zone de scan</b>, en haut de l'écran Opération de ramassage (cadre rouge).</span></li>
+          <li><span class="n">2</span><span>Scannez le <b>code-barres de l'étiquette</b> de chaque colis.</span></li>
+          <li><span class="n">3</span><span>Pas le temps de tout scanner ? Scannez au moins quelques colis (TikTok : <b>minimum 1 à 5</b>). <b>Ne repartez jamais sans scan.</b></span></li>
+        </ol>
+        <p style="margin-top:12px"><a href="#scan">Règles de scan TikTok en détail →</a></p>
+      </div>
+    </div>
     <div class="demo">
       <div class="phone-col">
         <div class="phone"><div class="screen">
@@ -704,16 +757,16 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
               </div>
             </div>
             <div class="card" style="display:flex;flex-direction:column;gap:9px">
-              <div class="scan"><svg><use href="#i-scan"/></svg></div>
-              <div class="rel" style="display:flex;flex-direction:column;gap:8px">
-                <span class="mk" style="top:-4px;left:-15px">3</span>
+              <div class="scan hl rel"><svg><use href="#i-scan"/></svg><span class="mk" style="top:-14px;right:-12px;background:#E03A3A">3</span></div>
+              <div class="rel" style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+                <span class="mk" style="top:-4px;left:-15px">4</span>
                 <div class="ctr"><span><span class="st">*</span>Colis</span><div class="stepper"><span>−</span><b class="mono">8</b><span>+</span></div></div>
                 <div class="ctr"><span><span class="st">*</span>Cartons</span><div class="stepper"><span>−</span><b class="mono">3</b><span>+</span></div></div>
                 <div class="ctr"><span><span class="st">*</span>Palettes</span><div class="stepper"><span>−</span><b class="mono">0</b><span>+</span></div></div>
               </div>
             </div>
             <div class="card">
-              <span class="mk" style="top:-9px;right:-6px">4</span>
+              <span class="mk" style="top:-9px;right:-6px">5</span>
               <div class="photos">
                 <div class="ph"><div class="slot full thumb-box"><span class="x">×</span></div><span><span style="color:#E03A3A">*</span> Marchandise</span></div>
                 <div class="ph"><div class="slot"><svg><use href="#i-cam"/></svg></div><span><span style="color:#E03A3A">*</span> Chargement</span></div>
@@ -721,11 +774,11 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
               </div>
             </div>
             <div class="card">
-              <span class="mk" style="top:-9px;right:-6px">5</span>
+              <span class="mk" style="top:-9px;right:-6px">6</span>
               <div class="lbl"><span class="st">*</span> Signature</div>
               <div class="sig"><svg viewBox="0 0 120 40"><path d="M6 28c8-16 14-20 16-12s-6 14 2 10 10-18 16-14-2 14 6 12 12-12 18-10 2 8 8 8 14-6 20-10 10 2 16 0"/></svg></div>
             </div>
-            <div class="btns3 rel"><div class="btn ghost">Échec</div><div class="btn">Partiel</div><div class="btn green">Terminé</div><span class="mk" style="top:-17px;left:50%;margin-left:-11px">6</span></div>
+            <div class="btns3 rel"><div class="btn ghost">Échec</div><div class="btn">Partiel</div><div class="btn green">Terminé</div><span class="mk" style="top:-17px;left:50%;margin-left:-11px">7</span></div>
           </div>
           <div class="home-ind"></div>
         </div></div>
@@ -735,10 +788,11 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
         <ol class="legend">
           <li><span class="num">1</span><div><span class="t">Appeler le client</span><span class="d">Pour vérifier qu'il y a bien des colis, ou prévenir de votre arrivée.</span></div></li>
           <li><span class="num">2</span><div><span class="t">Navigation</span><span class="d">Ouvre l'application GPS de votre téléphone. <b>L'adresse est déjà remplie.</b></span></div></li>
-          <li><span class="num">3</span><div><span class="t">Comptez et saisissez</span><span class="d">Le nombre de <b>colis</b>, de <b>cartons</b> et de <b>palettes</b>, avec les boutons − et +.</span></div></li>
-          <li><span class="num">4</span><div><span class="t">Photos</span><span class="d">Photo des colis, photo du chargement, et dans « Autres » : document signé, photo du commerçant.</span></div></li>
-          <li><span class="num">5</span><div><span class="t">Signature</span><span class="d">Faites signer le client directement sur l'écran.</span></div></li>
-          <li><span class="num">6</span><div><span class="t">Choisissez le résultat</span><span class="d"><span class="ui">Échec</span> <span class="ui or">Partiel</span> <span class="ui gr">Terminé</span> → voir l'étape 4 juste en dessous.</span></div></li>
+          <li class="hot"><span class="num">3</span><div><span class="t">Scannez les colis · zone de scan</span><span class="d">Touchez le cadre, puis scannez le code-barres de chaque colis. <b>Demandé par la plupart des clients.</b> Voir l'encadré rouge ci-dessus.</span></div></li>
+          <li><span class="num">4</span><div><span class="t">Comptez et saisissez</span><span class="d">Le nombre de <b>colis</b>, de <b>cartons</b> et de <b>palettes</b>, avec les boutons − et +.</span></div></li>
+          <li><span class="num">5</span><div><span class="t">Photos</span><span class="d">Photo des colis, photo du chargement, et dans « Autres » : document signé, photo du commerçant.</span></div></li>
+          <li><span class="num">6</span><div><span class="t">Signature</span><span class="d">Faites signer le client directement sur l'écran.</span></div></li>
+          <li><span class="num">7</span><div><span class="t">Choisissez le résultat</span><span class="d"><span class="ui">Échec</span> <span class="ui or">Partiel</span> <span class="ui gr">Terminé</span> → voir l'étape 4 juste en dessous.</span></div></li>
         </ol>
         <div class="box info">
           <svg><use href="#i-info"/></svg>
@@ -1091,7 +1145,7 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
       <div>
         <div class="eyebrow">TikTok · Chez le vendeur</div>
         <h2>Scanner = prouver la collecte</h2>
-        <p class="lead">Scannez les colis avec l'application, dans la <b>zone de scan</b> en haut de l'écran <a href="#ramassage">Opération de ramassage</a>.</p>
+        <p class="lead">Scannez les colis avec l'application, dans la <b>zone de scan</b> en haut de l'écran <a href="#scan-colis">Opération de ramassage</a>.</p>
       </div>
     </div>
     <div class="scanrule">
@@ -1244,6 +1298,7 @@ table.marks-t{border-collapse:collapse;width:100%;min-width:620px;font-size:.95r
       <div class="ck"><h3>À chaque adresse <small>Étapes 2–4</small></h3><ul>
         <li>Lire les horaires et la note</li>
         <li>Appeler le client si besoin</li>
+        <li><b>Scanner les colis</b> (zone de scan)</li>
         <li>Compter colis, cartons, palettes</li>
         <li>Photos + signature</li>
         <li>Terminé, Partiel ou Échec (+ raison)</li></ul></div>
